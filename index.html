@@ -1,0 +1,989 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>in/out — Daily Calorie Companion</title>
+  <meta name="description" content="Track calories, log meals with AI, build streaks, and hit your goals. Free on Android." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;900&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --orange: #f97316;
+      --pink: #ec4899;
+      --rose: #f43f5e;
+      --grad: linear-gradient(135deg, #f97316, #ec4899);
+      --bg: #ffffff;
+      --bg2: #f9f9f9;
+      --card: #f4f4f4;
+      --border: #e8e8e8;
+      --text: #1a1a1a;
+      --muted: #666666;
+      --shadow: 0 4px 24px rgba(0,0,0,0.06);
+      --nav-bg: rgba(255,255,255,0.88);
+      --toggle-bg: #e8e8e8;
+      --toggle-fg: #1a1a1a;
+    }
+    [data-theme="dark"] {
+      --bg: #0f0f0f;
+      --bg2: #141414;
+      --card: #1e1e1e;
+      --border: #2a2a2a;
+      --text: #f1f1f1;
+      --muted: #888888;
+      --shadow: 0 4px 24px rgba(0,0,0,0.3);
+      --nav-bg: rgba(15,15,15,0.88);
+      --toggle-bg: #2a2a2a;
+      --toggle-fg: #f1f1f1;
+    }
+
+    html { scroll-behavior: smooth; }
+    body { font-family: 'Inter', system-ui, sans-serif; background: var(--bg); color: var(--text); line-height: 1.6; transition: background .3s, color .3s; overflow-x: hidden; }
+
+    /* ── ANIMATED BACKGROUND BLOBS ── */
+    .blobs { position: fixed; inset: 0; z-index: 0; pointer-events: none; overflow: hidden; }
+    .blob { position: absolute; border-radius: 50%; filter: blur(80px); opacity: .12; animation: blobMove 18s ease-in-out infinite; }
+    [data-theme="dark"] .blob { opacity: .07; }
+    .blob1 { width: 600px; height: 600px; background: #f97316; top: -200px; left: -200px; animation-delay: 0s; }
+    .blob2 { width: 500px; height: 500px; background: #ec4899; top: 30%; right: -150px; animation-delay: -6s; }
+    .blob3 { width: 400px; height: 400px; background: #f43f5e; bottom: -100px; left: 30%; animation-delay: -12s; }
+    @keyframes blobMove {
+      0%, 100% { transform: translate(0, 0) scale(1); }
+      33% { transform: translate(40px, -30px) scale(1.05); }
+      66% { transform: translate(-20px, 40px) scale(0.97); }
+    }
+
+    /* ── NAV ── */
+    nav { position: fixed; top: 0; left: 0; right: 0; z-index: 100; backdrop-filter: blur(14px); background: var(--nav-bg); border-bottom: 1px solid var(--border); transition: background .3s, border-color .3s; }
+    .nav-inner { max-width: 1100px; margin: 0 auto; padding: 0 24px; height: 64px; display: flex; align-items: center; justify-content: space-between; gap: 16px; }
+    .logo { display: flex; align-items: center; gap: 10px; text-decoration: none; }
+    .logo-icon { width: 38px; height: 38px; flex-shrink: 0; filter: drop-shadow(0 2px 8px rgba(249,115,22,.4)); }
+    .logo-text { font-weight: 900; font-size: 19px; background: var(--grad); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+    .nav-right { display: flex; align-items: center; gap: 12px; }
+    .theme-toggle { width: 40px; height: 40px; border-radius: 50%; background: var(--toggle-bg); border: none; cursor: pointer; font-size: 18px; display: flex; align-items: center; justify-content: center; transition: background .2s, transform .2s; color: var(--toggle-fg); }
+    .theme-toggle:hover { transform: scale(1.1); }
+    .nav-cta { background: var(--grad); color: #fff; font-weight: 700; font-size: 14px; padding: 9px 22px; border-radius: 22px; text-decoration: none; transition: opacity .2s, transform .2s; box-shadow: 0 2px 14px rgba(249,115,22,.3); }
+    .nav-cta:hover { opacity: .88; transform: translateY(-1px); }
+
+    /* ── HERO ── */
+    .hero { position: relative; z-index: 1; padding: 140px 24px 80px; max-width: 1100px; margin: 0 auto; display: grid; grid-template-columns: 1fr 1fr; gap: 60px; align-items: center; }
+    @media (max-width: 768px) { .hero { grid-template-columns: 1fr; padding: 110px 24px 60px; text-align: center; } .hero-phone { display: none; } }
+    .hero-content {}
+    .hero-badge { display: inline-flex; align-items: center; gap: 6px; background: rgba(249,115,22,.1); color: var(--orange); font-size: 12px; font-weight: 700; letter-spacing: .08em; text-transform: uppercase; padding: 6px 14px; border-radius: 20px; border: 1px solid rgba(249,115,22,.25); margin-bottom: 24px; }
+    .hero h1 { font-size: clamp(2.4rem, 5vw, 3.6rem); font-weight: 900; line-height: 1.08; margin-bottom: 20px; position: relative; }
+    .hero h1 .grad-text { background: var(--grad); -webkit-background-clip: text; -webkit-text-fill-color: transparent; position: relative; display: inline-block; }
+    /* Sparkles */
+    .sparkle { position: absolute; pointer-events: none; font-size: 18px; animation: sparklePop 2.4s ease-in-out infinite; }
+    .sp1 { top: -18px; right: -24px; animation-delay: 0s; }
+    .sp2 { top: 50%; right: -36px; font-size: 12px; animation-delay: -.8s; }
+    .sp3 { bottom: -10px; right: -12px; font-size: 14px; animation-delay: -1.6s; }
+    @keyframes sparklePop { 0%,100% { opacity: .3; transform: scale(.8) rotate(0deg); } 50% { opacity: 1; transform: scale(1.2) rotate(20deg); } }
+    .hero p { font-size: 1.05rem; color: var(--muted); max-width: 460px; margin-bottom: 32px; }
+    .hero-buttons { display: flex; gap: 12px; flex-wrap: wrap; }
+    @media (max-width: 768px) { .hero-buttons { justify-content: center; } }
+    .btn-primary { display: inline-flex; align-items: center; gap: 10px; background: var(--grad); color: #fff; font-weight: 700; font-size: 15px; padding: 14px 26px; border-radius: 14px; text-decoration: none; transition: transform .2s, box-shadow .2s; box-shadow: 0 4px 20px rgba(249,115,22,.35); }
+    .btn-primary:hover { transform: translateY(-3px); box-shadow: 0 8px 28px rgba(249,115,22,.45); }
+    .btn-ghost { display: inline-flex; align-items: center; gap: 8px; color: var(--text); font-weight: 600; font-size: 15px; padding: 14px 22px; border-radius: 14px; text-decoration: none; border: 1.5px solid var(--border); transition: transform .2s, border-color .2s; }
+    .btn-ghost:hover { transform: translateY(-2px); border-color: var(--orange); }
+
+    /* Phone mockup */
+    .hero-phone { display: flex; justify-content: center; align-items: center; animation: phoneFloat 5s ease-in-out infinite; }
+    @keyframes phoneFloat { 0%,100% { transform: translateY(0); } 50% { transform: translateY(-16px); } }
+    .phone-frame { width: 240px; height: 480px; border-radius: 38px; background: var(--grad); padding: 3px; box-shadow: 0 30px 80px rgba(249,115,22,.25), 0 0 0 1px rgba(249,115,22,.2); }
+    .phone-screen { width: 100%; height: 100%; border-radius: 36px; background: #111; overflow: hidden; display: flex; flex-direction: column; min-height: 0; }
+    .phone-status { height: 28px; background: #1a1a1a; display: flex; align-items: center; justify-content: center; }
+    .phone-notch { width: 80px; height: 14px; background: #111; border-radius: 0 0 12px 12px; }
+    .phone-content { flex: 1; padding: 12px; display: flex; flex-direction: column; gap: 8px; }
+    .pc-greeting { font-size: 11px; font-weight: 900; color: #fff; }
+    .pc-ring-wrap { display: flex; justify-content: center; padding: 8px 0; }
+    .pc-ring { width: 80px; height: 80px; border-radius: 50%; background: conic-gradient(#f97316 0%, #ec4899 60%, #2a2a2a 60%); display: flex; align-items: center; justify-content: center; }
+    .pc-ring-inner { width: 62px; height: 62px; border-radius: 50%; background: #111; display: flex; flex-direction: column; align-items: center; justify-content: center; }
+    .pc-ring-inner span:first-child { font-size: 14px; font-weight: 900; color: #f97316; }
+    .pc-ring-inner span:last-child { font-size: 7px; color: #666; }
+    .pc-cards { display: flex; gap: 6px; }
+    .pc-card { flex: 1; background: #1e1e1e; border-radius: 10px; padding: 8px; }
+    .pc-card-label { font-size: 7px; color: #888; }
+    .pc-card-val { font-size: 13px; font-weight: 900; color: #fff; }
+    .pc-card-val.green { color: #34d399; }
+    .pc-card-val.orange { color: #f97316; }
+    .pc-log { background: #1e1e1e; border-radius: 10px; padding: 8px; }
+    .pc-log-row { display: flex; justify-content: space-between; align-items: center; }
+    .pc-log-row span:first-child { font-size: 8px; color: #ccc; }
+    .pc-log-row span:last-child { font-size: 8px; font-weight: 700; color: #34d399; }
+    .pc-xp { background: linear-gradient(135deg, rgba(249,115,22,.2), rgba(236,72,153,.2)); border-radius: 10px; padding: 8px; }
+    .pc-xp-row { display: flex; justify-content: space-between; align-items: center; margin-bottom: 4px; }
+    .pc-xp-row span { font-size: 8px; color: #ccc; }
+    .pc-xp-bar { height: 4px; background: #2a2a2a; border-radius: 2px; overflow: hidden; }
+    .pc-xp-fill { height: 100%; width: 40%; background: var(--grad); border-radius: 2px; }
+
+    /* Phone carousel */
+    .phone-carousel { position: relative; flex: 1; min-height: 0; overflow: hidden; }
+    .phone-slide { position: absolute; inset: 0; padding: 12px; display: flex; flex-direction: column; gap: 8px; opacity: 0; transform: translateX(28px); transition: opacity .55s ease, transform .55s ease; pointer-events: none; }
+    .phone-slide.active { opacity: 1; transform: translateX(0); pointer-events: auto; }
+    .phone-slide.exit { opacity: 0; transform: translateX(-28px); }
+    .ps-dot-row { position: absolute; bottom: 8px; left: 0; right: 0; display: flex; justify-content: center; gap: 5px; z-index: 10; }
+    .ps-dot { width: 6px; height: 6px; border-radius: 50%; background: #333; transition: background .3s; }
+    .ps-dot.active { background: var(--orange); }
+
+    /* ── SECTION BASE ── */
+    section { position: relative; z-index: 1; }
+    .container { max-width: 1100px; margin: 0 auto; padding: 0 24px; }
+    .section-pad { padding: 80px 0; }
+    .section-label { text-align: center; font-size: 11px; font-weight: 700; letter-spacing: .12em; text-transform: uppercase; color: var(--orange); margin-bottom: 10px; }
+    .section-title { text-align: center; font-size: clamp(1.8rem, 4vw, 2.5rem); font-weight: 900; margin-bottom: 16px; }
+    .section-sub { text-align: center; font-size: 1rem; color: var(--muted); max-width: 520px; margin: 0 auto 48px; }
+    .divider { width: 48px; height: 3px; background: var(--grad); border-radius: 2px; margin: 0 auto 48px; }
+
+    /* ── STATS ── */
+    .stats-bar { background: var(--bg2); border-top: 1px solid var(--border); border-bottom: 1px solid var(--border); }
+    .stats-inner { max-width: 1100px; margin: 0 auto; padding: 32px 24px; display: grid; grid-template-columns: repeat(4, 1fr); gap: 24px; }
+    @media (max-width: 600px) { .stats-inner { grid-template-columns: repeat(2, 1fr); } }
+    .stat { text-align: center; }
+    .stat-num { font-size: 2rem; font-weight: 900; background: var(--grad); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+    .stat-label { font-size: 13px; color: var(--muted); margin-top: 2px; }
+
+    /* ── HOW IT WORKS ── */
+    .steps { display: grid; grid-template-columns: repeat(3, 1fr); gap: 32px; }
+    @media (max-width: 640px) { .steps { grid-template-columns: 1fr; } }
+    .step { text-align: center; padding: 32px 24px; background: var(--card); border: 1px solid var(--border); border-radius: 24px; transition: transform .25s; }
+    .step:hover { transform: translateY(-6px); }
+    .step-num { width: 48px; height: 48px; border-radius: 50%; background: var(--grad); color: #fff; font-weight: 900; font-size: 20px; display: flex; align-items: center; justify-content: center; margin: 0 auto 16px; box-shadow: 0 4px 16px rgba(249,115,22,.3); }
+    .step-icon { font-size: 2.2rem; margin-bottom: 12px; }
+    .step-title { font-weight: 800; font-size: 1.1rem; margin-bottom: 8px; }
+    .step-desc { font-size: 14px; color: var(--muted); }
+    .step-connector { display: none; }
+    @media (min-width: 641px) {
+      .steps-wrap { position: relative; }
+      .steps-wrap::before { content: ''; position: absolute; top: 80px; left: calc(33.3% - 16px); right: calc(33.3% - 16px); height: 2px; background: linear-gradient(90deg, #f97316, #ec4899); z-index: 0; opacity: .3; }
+    }
+
+    /* ── TAB PREVIEW ── */
+    .tabs-section { background: var(--bg2); border-top: 1px solid var(--border); border-bottom: 1px solid var(--border); }
+    .tab-nav { display: flex; gap: 8px; justify-content: center; flex-wrap: wrap; margin-bottom: 40px; }
+    .tab-btn { padding: 10px 20px; border-radius: 24px; border: 1.5px solid var(--border); background: var(--card); color: var(--muted); font-weight: 600; font-size: 14px; cursor: pointer; transition: all .2s; display: flex; align-items: center; gap: 6px; }
+    .tab-btn.active, .tab-btn:hover { background: var(--grad); color: #fff; border-color: transparent; box-shadow: 0 4px 14px rgba(249,115,22,.3); }
+    .tab-content { display: none; grid-template-columns: 1fr 1fr; gap: 40px; align-items: center; }
+    .tab-content.active { display: grid; }
+    @media (max-width: 640px) { .tab-content { grid-template-columns: 1fr; } .tab-content .tab-screen { display: none; } }
+    .tab-info h3 { font-size: 1.6rem; font-weight: 900; margin-bottom: 12px; }
+    .tab-info p { font-size: 15px; color: var(--muted); margin-bottom: 20px; line-height: 1.7; }
+    .tab-features { display: flex; flex-direction: column; gap: 10px; }
+    .tab-feat { display: flex; align-items: center; gap: 10px; font-size: 14px; }
+    .tab-feat::before { content: "✦"; color: var(--orange); font-size: 10px; flex-shrink: 0; }
+    .tab-screen { background: #111; border-radius: 28px; padding: 20px; min-height: 320px; display: flex; flex-direction: column; gap: 12px; box-shadow: var(--shadow); }
+    .ts-header { font-size: 13px; font-weight: 900; color: #fff; margin-bottom: 4px; }
+    .ts-card { background: #1e1e1e; border-radius: 14px; padding: 14px; }
+    .ts-card-title { font-size: 11px; font-weight: 700; color: #888; margin-bottom: 6px; }
+    .ts-bar { height: 8px; border-radius: 4px; background: #2a2a2a; margin-bottom: 6px; overflow: hidden; }
+    .ts-bar-fill { height: 100%; border-radius: 4px; background: var(--grad); }
+    .ts-row { display: flex; justify-content: space-between; align-items: center; }
+    .ts-label { font-size: 11px; color: #888; }
+    .ts-val { font-size: 12px; font-weight: 700; color: #fff; }
+    .ts-val.green { color: #34d399; }
+    .ts-val.orange { color: #f97316; }
+    .ts-chart { display: flex; align-items: flex-end; gap: 6px; height: 60px; }
+    .ts-bar-v { flex: 1; border-radius: 4px 4px 0 0; background: rgba(249,115,22,.4); transition: height .3s; }
+    .ts-bar-v.active { background: var(--grad); }
+    .ts-tag { display: inline-block; padding: 3px 8px; border-radius: 6px; font-size: 10px; font-weight: 700; background: rgba(249,115,22,.15); color: var(--orange); margin: 3px 2px 0; }
+    .ts-mission { display: flex; align-items: center; gap: 10px; padding: 8px 0; border-bottom: 1px solid #2a2a2a; }
+    .ts-mission:last-child { border-bottom: none; }
+    .ts-m-icon { font-size: 18px; }
+    .ts-m-info { flex: 1; }
+    .ts-m-name { font-size: 11px; font-weight: 700; color: #fff; }
+    .ts-m-prog { font-size: 10px; color: #888; }
+    .ts-m-xp { font-size: 11px; font-weight: 800; color: var(--orange); }
+    .ts-forum-post { background: #252525; border-radius: 10px; padding: 10px; margin-bottom: 6px; }
+    .ts-forum-user { font-size: 10px; font-weight: 700; color: var(--orange); margin-bottom: 3px; }
+    .ts-forum-text { font-size: 10px; color: #ccc; }
+
+    /* ── FEATURES ── */
+    .features-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 20px; }
+    .feature-card { background: var(--card); border: 1px solid var(--border); border-radius: 20px; padding: 28px; transition: transform .25s, border-color .25s, box-shadow .25s; }
+    .feature-card:hover { transform: translateY(-5px); border-color: rgba(249,115,22,.35); box-shadow: 0 8px 32px rgba(249,115,22,.1); }
+    .feature-icon { font-size: 2rem; margin-bottom: 14px; }
+    .feature-title { font-size: 1rem; font-weight: 800; margin-bottom: 8px; }
+    .feature-desc { font-size: 14px; color: var(--muted); line-height: 1.65; }
+    .feature-tag { display: inline-block; margin-top: 12px; font-size: 11px; font-weight: 700; padding: 4px 10px; border-radius: 8px; background: rgba(249,115,22,.1); color: var(--orange); border: 1px solid rgba(249,115,22,.2); }
+
+    /* ── PRICING ── */
+    .pricing-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 20px; max-width: 960px; margin: 0 auto; }
+    .pricing-card { background: var(--card); border: 1.5px solid var(--border); border-radius: 24px; padding: 32px; position: relative; transition: transform .25s; }
+    .pricing-card:hover { transform: translateY(-4px); }
+    .pricing-card.featured { border-color: var(--orange); background: rgba(249,115,22,.04); }
+    [data-theme="dark"] .pricing-card.featured { background: rgba(249,115,22,.07); }
+    .pricing-badge { position: absolute; top: -13px; left: 50%; transform: translateX(-50%); background: var(--grad); color: #fff; font-size: 11px; font-weight: 800; padding: 4px 16px; border-radius: 20px; white-space: nowrap; }
+    .pricing-plan { font-size: 12px; font-weight: 700; color: var(--muted); text-transform: uppercase; letter-spacing: .08em; margin-bottom: 6px; }
+    .pricing-price { font-size: 2.6rem; font-weight: 900; margin-bottom: 2px; }
+    .pricing-price sup { font-size: 1.2rem; font-weight: 700; vertical-align: super; }
+    .pricing-price sub { font-size: .9rem; font-weight: 500; color: var(--muted); }
+    .pricing-note { font-size: 13px; color: var(--muted); margin-bottom: 24px; }
+    .pricing-features { list-style: none; margin-bottom: 28px; display: flex; flex-direction: column; gap: 10px; }
+    .pricing-features li { font-size: 14px; display: flex; align-items: flex-start; gap: 8px; }
+    .pricing-features li::before { content: "✓"; color: var(--orange); font-weight: 900; flex-shrink: 0; margin-top: 1px; }
+    .pricing-btn { display: block; text-align: center; font-weight: 700; font-size: 15px; padding: 13px; border-radius: 14px; text-decoration: none; transition: opacity .2s, transform .2s; }
+    .pricing-btn.solid { background: var(--grad); color: #fff; box-shadow: 0 4px 16px rgba(249,115,22,.3); }
+    .pricing-btn.solid:hover { opacity: .88; transform: translateY(-2px); }
+    .pricing-btn.outline { border: 1.5px solid var(--border); color: var(--text); }
+    .pricing-btn.outline:hover { border-color: var(--orange); transform: translateY(-2px); }
+
+    /* ── TESTIMONIALS ── */
+    .testimonials-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 20px; }
+    .testi-card { background: var(--card); border: 1px solid var(--border); border-radius: 20px; padding: 24px; transition: transform .25s; }
+    .testi-card:hover { transform: translateY(-4px); }
+    .testi-stars { color: #f97316; font-size: 15px; margin-bottom: 12px; }
+    .testi-text { font-size: 14px; color: var(--muted); line-height: 1.7; margin-bottom: 16px; font-style: italic; }
+    .testi-author { display: flex; align-items: center; gap: 10px; }
+    .testi-avatar { width: 36px; height: 36px; border-radius: 50%; background: var(--grad); display: flex; align-items: center; justify-content: center; font-size: 15px; color: #fff; font-weight: 700; }
+    .testi-name { font-weight: 700; font-size: 14px; }
+    .testi-label { font-size: 12px; color: var(--muted); }
+
+    /* ── FAQ ── */
+    .faq-list { max-width: 720px; margin: 0 auto; display: flex; flex-direction: column; gap: 10px; }
+    .faq-item { background: var(--card); border: 1px solid var(--border); border-radius: 16px; overflow: hidden; transition: border-color .2s; }
+    .faq-item.open { border-color: rgba(249,115,22,.3); }
+    .faq-q { width: 100%; background: none; border: none; text-align: left; padding: 18px 20px; font-size: 15px; font-weight: 700; color: var(--text); cursor: pointer; display: flex; justify-content: space-between; align-items: center; gap: 12px; font-family: inherit; }
+    .faq-icon { font-size: 20px; color: var(--orange); transition: transform .25s; flex-shrink: 0; }
+    .faq-item.open .faq-icon { transform: rotate(45deg); }
+    .faq-a { max-height: 0; overflow: hidden; transition: max-height .3s ease, padding .3s; }
+    .faq-item.open .faq-a { max-height: 200px; }
+    .faq-a p { padding: 0 20px 18px; font-size: 14px; color: var(--muted); line-height: 1.7; }
+
+    /* ── EARLY ACCESS ── */
+    .early-access { position: relative; z-index: 1; overflow: hidden; }
+    .ea-inner { max-width: 1100px; margin: 0 auto; padding: 80px 24px; text-align: center; }
+    .ea-glow { position: absolute; inset: 0; background: linear-gradient(135deg, rgba(249,115,22,.12), rgba(236,72,153,.12)); pointer-events: none; }
+    .ea-label { display: inline-flex; align-items: center; gap: 6px; background: rgba(249,115,22,.12); color: var(--orange); font-size: 11px; font-weight: 700; letter-spacing: .1em; text-transform: uppercase; padding: 6px 16px; border-radius: 20px; border: 1px solid rgba(249,115,22,.3); margin-bottom: 24px; }
+    .ea-title { font-size: clamp(2rem, 5vw, 3rem); font-weight: 900; line-height: 1.1; margin-bottom: 16px; }
+    .ea-title span { background: var(--grad); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+    .ea-sub { font-size: 1.05rem; color: var(--muted); max-width: 500px; margin: 0 auto 36px; }
+    .ea-buttons { display: flex; gap: 14px; justify-content: center; flex-wrap: wrap; }
+    .ea-badge-row { display: flex; align-items: center; justify-content: center; gap: 10px; margin-top: 24px; }
+    .ea-badge-img { width: 52px; height: 52px; border-radius: 50%; box-shadow: 0 4px 16px rgba(249,115,22,.35); }
+    .ea-badge-text { font-size: 13px; color: var(--muted); text-align: left; line-height: 1.4; }
+    .ea-badge-text strong { color: var(--text); display: block; }
+
+    /* ── FOOTER ── */
+    footer { border-top: 1px solid var(--border); padding: 40px 24px; position: relative; z-index: 1; }
+    .footer-inner { max-width: 1100px; margin: 0 auto; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 16px; }
+    .footer-links { display: flex; gap: 20px; flex-wrap: wrap; }
+    .footer-links a { color: var(--muted); text-decoration: none; font-size: 14px; transition: color .2s; }
+    .footer-links a:hover { color: var(--text); }
+    .footer-copy { font-size: 13px; color: var(--muted); }
+
+    /* ── MOBILE STICKY BANNER ── */
+    .sticky-banner { display: none; }
+    @media (max-width: 768px) {
+      .sticky-banner { display: flex; align-items: center; justify-content: space-between; position: fixed; bottom: 0; left: 0; right: 0; z-index: 200; background: var(--bg); border-top: 1px solid var(--border); padding: 12px 20px; gap: 12px; backdrop-filter: blur(10px); }
+      .sb-text { font-size: 13px; font-weight: 700; }
+      .sb-text span { font-size: 11px; color: var(--muted); display: block; font-weight: 400; }
+      .sb-btn { background: var(--grad); color: #fff; font-weight: 700; font-size: 13px; padding: 10px 18px; border-radius: 12px; text-decoration: none; white-space: nowrap; }
+      body { padding-bottom: 72px; }
+    }
+
+    /* ── SCROLL FADE ── */
+    .fade-in { opacity: 0; transform: translateY(24px); transition: opacity .6s ease, transform .6s ease; }
+    .fade-in.visible { opacity: 1; transform: translateY(0); }
+  </style>
+</head>
+<body>
+
+  <!-- Animated blobs -->
+  <div class="blobs">
+    <div class="blob blob1"></div>
+    <div class="blob blob2"></div>
+    <div class="blob blob3"></div>
+  </div>
+
+  <!-- NAV -->
+  <nav>
+    <div class="nav-inner">
+      <a href="/" class="logo">
+        <div class="logo-icon"><img src="logo.svg" alt="in/out" style="width:100%;height:100%;display:block;" /></div>
+        <span class="logo-text">in/out</span>
+      </a>
+      <div class="nav-right">
+        <button class="theme-toggle" id="themeToggle" aria-label="Toggle dark mode">☀️</button>
+        <a href="https://play.google.com/store/apps/details?id=co.inoutapp.android" class="nav-cta">Download Free</a>
+      </div>
+    </div>
+  </nav>
+
+  <!-- HERO -->
+  <section>
+    <div class="hero">
+      <div class="hero-content">
+        <div class="hero-badge">🤖 AI-Powered · Now on Android</div>
+        <h1>Your daily calorie<br /><span class="grad-text">companion<span class="sparkle sp1">✦</span><span class="sparkle sp2">✦</span><span class="sparkle sp3">✦</span></span></h1>
+        <p>Log meals with your voice, barcode scanner, or AI analysis. Track macros, build streaks, and hit your goals — free.</p>
+        <div class="hero-buttons">
+          <a href="https://play.google.com/store/apps/details?id=co.inoutapp.android" class="btn-primary">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="white"><path d="M3 20.5v-17c0-.83 1.01-1.28 1.6-.7l14 8.5c.53.32.53 1.08 0 1.4l-14 8.5c-.59.58-1.6.13-1.6-.7z"/></svg>
+            Download on Google Play
+          </a>
+          <a href="#features" class="btn-ghost">See Features →</a>
+        </div>
+      </div>
+      <div class="hero-phone">
+        <div class="phone-frame">
+          <div class="phone-screen">
+            <div class="phone-status"><div class="phone-notch"></div></div>
+            <div class="phone-carousel" id="phoneCarousel">
+
+              <!-- Screen 1: Home -->
+              <div class="phone-slide active" data-screen="0">
+                <div style="font-size:11px;font-weight:900;color:#fff;margin-bottom:2px">Good morning! 🌅</div>
+                <div style="font-size:9px;color:#888;margin-bottom:6px">Thursday · 1,600 kcal goal</div>
+                <div class="pc-ring-wrap" style="padding:4px 0">
+                  <div class="pc-ring"><div class="pc-ring-inner"><span>1,420</span><span>kcal left</span></div></div>
+                </div>
+                <div class="pc-cards" style="gap:5px">
+                  <div class="pc-card" style="padding:6px"><div class="pc-card-label">Consumed</div><div class="pc-card-val orange" style="font-size:14px">580</div></div>
+                  <div class="pc-card" style="padding:6px"><div class="pc-card-label">Burned</div><div class="pc-card-val green" style="font-size:14px">320</div></div>
+                  <div class="pc-card" style="padding:6px"><div class="pc-card-label">Streak</div><div class="pc-card-val" style="font-size:14px">🔥12</div></div>
+                </div>
+                <div style="background:#1e1e1e;border-radius:12px;padding:8px">
+                  <div style="font-size:9px;font-weight:700;color:#888;margin-bottom:5px">TODAY'S LOG</div>
+                  <div class="pc-log-row"><span style="font-size:9px;color:#ccc">🥗 Chicken Salad</span><span style="font-size:9px;color:#34d399;font-weight:700">420 kcal</span></div>
+                  <div class="pc-log-row" style="margin-top:5px"><span style="font-size:9px;color:#ccc">☕ Black Coffee</span><span style="font-size:9px;color:#34d399;font-weight:700">2 kcal</span></div>
+                  <div class="pc-log-row" style="margin-top:5px"><span style="font-size:9px;color:#ccc">🍌 Banana</span><span style="font-size:9px;color:#34d399;font-weight:700">89 kcal</span></div>
+                  <div class="pc-log-row" style="margin-top:5px"><span style="font-size:9px;color:#ccc">💪 Chest workout</span><span style="font-size:9px;color:#f97316;font-weight:700">−320 kcal</span></div>
+                </div>
+                <div style="background:linear-gradient(135deg,rgba(249,115,22,.15),rgba(236,72,153,.15));border:1px solid rgba(249,115,22,.2);border-radius:12px;padding:8px">
+                  <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:4px">
+                    <span style="font-size:9px;font-weight:700;color:#fff">Lvl 3 · Explorer</span>
+                    <span style="font-size:9px;color:#f97316;font-weight:700">+80 XP today</span>
+                  </div>
+                  <div style="height:5px;background:#2a2a2a;border-radius:3px;overflow:hidden"><div style="height:100%;width:40%;background:linear-gradient(90deg,#f97316,#ec4899);border-radius:3px"></div></div>
+                  <div style="font-size:8px;color:#888;margin-top:3px">160 / 400 XP to Lvl 4</div>
+                </div>
+              </div>
+
+              <!-- Screen 2: AI Logging -->
+              <div class="phone-slide" data-screen="1">
+                <div style="font-size:11px;font-weight:900;color:#fff;margin-bottom:6px">🤖 AI Food Log</div>
+                <div style="background:linear-gradient(135deg,rgba(249,115,22,.18),rgba(236,72,153,.18));border:1px solid rgba(249,115,22,.35);border-radius:12px;padding:10px;font-size:10px;color:#e0e0e0;font-style:italic;line-height:1.5">"Large bowl of pasta bolognese with garlic bread and a glass of red wine"</div>
+                <div style="background:#1e1e1e;border-radius:12px;padding:10px">
+                  <div style="font-size:9px;font-weight:700;color:#888;margin-bottom:6px">AI ANALYSIS</div>
+                  <div class="pc-log-row"><span style="font-size:10px;font-weight:800;color:#f97316">Calories</span><span style="font-size:12px;font-weight:900;color:#f97316">1,040 kcal</span></div>
+                  <div style="height:1px;background:#2a2a2a;margin:6px 0"></div>
+                  <div class="pc-log-row" style="margin-top:4px"><span style="font-size:9px;color:#ccc">Protein</span><span style="font-size:10px;font-weight:700;color:#60a5fa">38g</span></div>
+                  <div class="pc-log-row" style="margin-top:4px"><span style="font-size:9px;color:#ccc">Carbs</span><span style="font-size:10px;font-weight:700;color:#fbbf24">112g</span></div>
+                  <div class="pc-log-row" style="margin-top:4px"><span style="font-size:9px;color:#ccc">Fat</span><span style="font-size:10px;font-weight:700;color:#f87171">34g</span></div>
+                  <div class="pc-log-row" style="margin-top:4px"><span style="font-size:9px;color:#ccc">Fiber</span><span style="font-size:10px;font-weight:700;color:#34d399">6g</span></div>
+                </div>
+                <div style="background:#1e1e1e;border-radius:12px;padding:10px;display:flex;gap:6px;flex-wrap:wrap">
+                  <span style="font-size:9px;padding:3px 8px;background:rgba(249,115,22,.15);color:#f97316;border-radius:6px;font-weight:700">🎙️ Voice</span>
+                  <span style="font-size:9px;padding:3px 8px;background:rgba(249,115,22,.15);color:#f97316;border-radius:6px;font-weight:700">📷 Barcode</span>
+                  <span style="font-size:9px;padding:3px 8px;background:rgba(249,115,22,.15);color:#f97316;border-radius:6px;font-weight:700">✏️ Manual</span>
+                  <span style="font-size:9px;padding:3px 8px;background:rgba(249,115,22,.15);color:#f97316;border-radius:6px;font-weight:700">🍔 Restaurant</span>
+                </div>
+                <div style="background:linear-gradient(135deg,#f97316,#ec4899);border-radius:12px;padding:10px;display:flex;align-items:center;justify-content:center;gap:8px">
+                  <span style="font-size:16px">🎙️</span>
+                  <span style="font-size:11px;color:#fff;font-weight:800">Tap to speak your meal</span>
+                </div>
+              </div>
+
+              <!-- Screen 3: Trends -->
+              <div class="phone-slide" data-screen="2">
+                <div style="font-size:11px;font-weight:900;color:#fff;margin-bottom:6px">📈 This Week</div>
+                <div style="background:#1e1e1e;border-radius:12px;padding:10px">
+                  <div style="font-size:9px;font-weight:700;color:#888;margin-bottom:8px">CALORIES</div>
+                  <div style="display:flex;align-items:flex-end;gap:4px;height:55px">
+                    <div style="flex:1;background:rgba(249,115,22,.3);border-radius:3px 3px 0 0;height:52%"></div>
+                    <div style="flex:1;background:rgba(249,115,22,.3);border-radius:3px 3px 0 0;height:68%"></div>
+                    <div style="flex:1;background:rgba(249,115,22,.3);border-radius:3px 3px 0 0;height:42%"></div>
+                    <div style="flex:1;background:linear-gradient(135deg,#f97316,#ec4899);border-radius:3px 3px 0 0;height:85%"></div>
+                    <div style="flex:1;background:linear-gradient(135deg,#f97316,#ec4899);border-radius:3px 3px 0 0;height:62%"></div>
+                    <div style="flex:1;background:linear-gradient(135deg,#f97316,#ec4899);border-radius:3px 3px 0 0;height:55%"></div>
+                    <div style="flex:1;background:linear-gradient(135deg,#f97316,#ec4899);border-radius:3px 3px 0 0;height:70%"></div>
+                  </div>
+                  <div style="display:flex;justify-content:space-between;margin-top:4px">
+                    <span style="font-size:8px;color:#555">S</span><span style="font-size:8px;color:#555">M</span><span style="font-size:8px;color:#555">T</span><span style="font-size:8px;color:#f97316;font-weight:700">W</span><span style="font-size:8px;color:#f97316;font-weight:700">T</span><span style="font-size:8px;color:#f97316;font-weight:700">F</span><span style="font-size:8px;color:#f97316;font-weight:700">S</span>
+                  </div>
+                </div>
+                <div class="pc-cards" style="gap:5px">
+                  <div class="pc-card" style="padding:7px"><div class="pc-card-label">Avg/day</div><div class="pc-card-val orange" style="font-size:12px">1,640</div></div>
+                  <div class="pc-card" style="padding:7px"><div class="pc-card-label">Goal hit</div><div class="pc-card-val green" style="font-size:12px">5/7</div></div>
+                  <div class="pc-card" style="padding:7px"><div class="pc-card-label">Sleep</div><div class="pc-card-val" style="font-size:12px">7.2h</div></div>
+                </div>
+                <div style="background:#1e1e1e;border-radius:12px;padding:10px">
+                  <div style="font-size:9px;font-weight:700;color:#888;margin-bottom:6px">MACROS AVG</div>
+                  <div class="pc-log-row"><span style="font-size:9px;color:#60a5fa">Protein</span><div style="flex:1;margin:0 8px;height:5px;background:#2a2a2a;border-radius:3px;overflow:hidden"><div style="height:100%;width:72%;background:#60a5fa;border-radius:3px"></div></div><span style="font-size:9px;font-weight:700;color:#fff">128g</span></div>
+                  <div class="pc-log-row" style="margin-top:5px"><span style="font-size:9px;color:#fbbf24">Carbs</span><div style="flex:1;margin:0 8px;height:5px;background:#2a2a2a;border-radius:3px;overflow:hidden"><div style="height:100%;width:58%;background:#fbbf24;border-radius:3px"></div></div><span style="font-size:9px;font-weight:700;color:#fff">198g</span></div>
+                  <div class="pc-log-row" style="margin-top:5px"><span style="font-size:9px;color:#f87171">Fat</span><div style="flex:1;margin:0 8px;height:5px;background:#2a2a2a;border-radius:3px;overflow:hidden"><div style="height:100%;width:35%;background:#f87171;border-radius:3px"></div></div><span style="font-size:9px;font-weight:700;color:#fff">52g</span></div>
+                </div>
+                <div style="background:#1e1e1e;border-radius:12px;padding:8px;display:flex;justify-content:space-between;align-items:center">
+                  <span style="font-size:9px;color:#888">Mood this week</span>
+                  <div style="display:flex;gap:4px">
+                    <span style="font-size:14px">🙂</span><span style="font-size:14px">😄</span><span style="font-size:14px">😐</span><span style="font-size:14px">😄</span><span style="font-size:14px">🙂</span>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Screen 4: Missions -->
+              <div class="phone-slide" data-screen="3">
+                <div style="font-size:11px;font-weight:900;color:#fff;margin-bottom:2px">📋 Daily Missions</div>
+                <div style="font-size:9px;color:#888;margin-bottom:6px">2/5 complete · 260 XP available</div>
+                <div style="background:linear-gradient(135deg,rgba(249,115,22,.15),rgba(236,72,153,.15));border:1px solid rgba(249,115,22,.2);border-radius:12px;padding:8px;margin-bottom:2px">
+                  <div style="display:flex;justify-content:space-between;margin-bottom:4px"><span style="font-size:9px;font-weight:700;color:#fff">Lvl 3 · Explorer</span><span style="font-size:9px;color:#f97316">160 / 400 XP</span></div>
+                  <div style="height:5px;background:#2a2a2a;border-radius:3px;overflow:hidden"><div style="height:100%;width:40%;background:linear-gradient(90deg,#f97316,#ec4899);border-radius:3px"></div></div>
+                </div>
+                <div style="background:#1e1e1e;border-radius:12px;padding:8px;display:flex;flex-direction:column;gap:0">
+                  <div style="display:flex;align-items:center;gap:8px;padding:6px 0;border-bottom:1px solid #2a2a2a">
+                    <span style="font-size:15px">🔥</span><div style="flex:1"><div style="font-size:10px;font-weight:700;color:#fff">Log 3 meals</div><div style="height:3px;background:#2a2a2a;border-radius:2px;margin-top:3px;overflow:hidden"><div style="height:100%;width:33%;background:#f97316;border-radius:2px"></div></div></div><span style="font-size:10px;font-weight:800;color:#f97316">+50 XP</span>
+                  </div>
+                  <div style="display:flex;align-items:center;gap:8px;padding:6px 0;border-bottom:1px solid #2a2a2a">
+                    <span style="font-size:15px">💧</span><div style="flex:1"><div style="font-size:10px;font-weight:700;color:#fff">Drink 6 glasses</div><div style="height:3px;background:#2a2a2a;border-radius:2px;margin-top:3px;overflow:hidden"><div style="height:100%;width:66%;background:#60a5fa;border-radius:2px"></div></div></div><span style="font-size:10px;font-weight:800;color:#f97316">+30 XP</span>
+                  </div>
+                  <div style="display:flex;align-items:center;gap:8px;padding:6px 0;border-bottom:1px solid #2a2a2a">
+                    <span style="font-size:15px">⚖️</span><div style="flex:1"><div style="font-size:10px;font-weight:700;color:#34d399">Log weight ✓</div><div style="height:3px;background:#2a2a2a;border-radius:2px;margin-top:3px;overflow:hidden"><div style="height:100%;width:100%;background:#34d399;border-radius:2px"></div></div></div><span style="font-size:10px;font-weight:800;color:#34d399">✓ Done</span>
+                  </div>
+                  <div style="display:flex;align-items:center;gap:8px;padding:6px 0;border-bottom:1px solid #2a2a2a">
+                    <span style="font-size:15px">🏃</span><div style="flex:1"><div style="font-size:10px;font-weight:700;color:#fff">Burn 200 kcal</div><div style="height:3px;background:#2a2a2a;border-radius:2px;margin-top:3px;overflow:hidden"><div style="height:100%;width:100%;background:#34d399;border-radius:2px"></div></div></div><span style="font-size:10px;font-weight:800;color:#34d399">✓ Done</span>
+                  </div>
+                  <div style="display:flex;align-items:center;gap:8px;padding:6px 0">
+                    <span style="font-size:15px">😴</span><div style="flex:1"><div style="font-size:10px;font-weight:700;color:#fff">Log your sleep</div><div style="height:3px;background:#2a2a2a;border-radius:2px;margin-top:3px"></div></div><span style="font-size:10px;font-weight:800;color:#f97316">+40 XP</span>
+                  </div>
+                </div>
+                <div style="background:#1e1e1e;border-radius:10px;padding:8px;text-align:center"><span style="font-size:10px;color:#888">🔥 12-day streak · Don't break it!</span></div>
+              </div>
+
+              <!-- Screen 5: Social -->
+              <div class="phone-slide" data-screen="4">
+                <div style="font-size:11px;font-weight:900;color:#fff;margin-bottom:6px">👥 Community</div>
+                <div style="background:#1e1e1e;border-radius:12px;padding:10px;margin-bottom:6px">
+                  <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:4px">
+                    <span style="font-size:9px;font-weight:700;color:#f97316">@alex_fit</span>
+                    <span style="font-size:8px;color:#555">2m ago</span>
+                  </div>
+                  <div style="font-size:10px;color:#ccc;line-height:1.5">Hit my 30-day streak! 🔥 Down 14 lbs and feeling unstoppable. AI logging changed everything for me.</div>
+                  <div style="display:flex;gap:12px;margin-top:6px"><span style="font-size:9px;color:#f87171">❤️ 24</span><span style="font-size:9px;color:#888">💬 8</span><span style="font-size:9px;color:#888">🔁 3</span></div>
+                </div>
+                <div style="background:#1e1e1e;border-radius:12px;padding:10px;margin-bottom:6px">
+                  <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:4px">
+                    <span style="font-size:9px;font-weight:700;color:#ec4899">@maria_wellness</span>
+                    <span style="font-size:8px;color:#555">15m ago</span>
+                  </div>
+                  <div style="font-size:10px;color:#ccc;line-height:1.5">AI voice logging is incredible 😍 Said "oatmeal with berries and honey" — nailed every macro perfectly.</div>
+                  <div style="display:flex;gap:12px;margin-top:6px"><span style="font-size:9px;color:#f87171">❤️ 41</span><span style="font-size:9px;color:#888">💬 12</span><span style="font-size:9px;color:#888">🔁 7</span></div>
+                </div>
+                <div style="background:#1e1e1e;border-radius:12px;padding:8px">
+                  <div style="font-size:9px;font-weight:700;color:#888;margin-bottom:5px">FORUM CATEGORIES</div>
+                  <div style="display:flex;gap:5px;flex-wrap:wrap">
+                    <span style="font-size:9px;padding:3px 8px;background:rgba(249,115,22,.15);color:#f97316;border-radius:6px;font-weight:700">Wins</span>
+                    <span style="font-size:9px;padding:3px 8px;background:rgba(249,115,22,.15);color:#f97316;border-radius:6px;font-weight:700">Nutrition</span>
+                    <span style="font-size:9px;padding:3px 8px;background:rgba(249,115,22,.15);color:#f97316;border-radius:6px;font-weight:700">Workouts</span>
+                    <span style="font-size:9px;padding:3px 8px;background:rgba(249,115,22,.15);color:#f97316;border-radius:6px;font-weight:700">P.R.</span>
+                    <span style="font-size:9px;padding:3px 8px;background:rgba(249,115,22,.15);color:#f97316;border-radius:6px;font-weight:700">Recipes</span>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Fixed dot row -->
+              <div class="ps-dot-row" id="dotRow"></div>
+
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- STATS BAR -->
+  <div class="stats-bar">
+    <div class="stats-inner">
+      <div class="stat fade-in"><div class="stat-num">380K+</div><div class="stat-label">Foods in database</div></div>
+      <div class="stat fade-in"><div class="stat-num">$0</div><div class="stat-label">To get started</div></div>
+      <div class="stat fade-in"><div class="stat-num">AI</div><div class="stat-label">Powered logging</div></div>
+      <div class="stat fade-in"><div class="stat-num">24/7</div><div class="stat-label">Autonomous agents</div></div>
+    </div>
+  </div>
+
+  <!-- HOW IT WORKS -->
+  <section class="section-pad">
+    <div class="container">
+      <p class="section-label fade-in">How it works</p>
+      <h2 class="section-title fade-in">Three steps to your goals</h2>
+      <div class="divider fade-in"></div>
+      <div class="steps-wrap">
+        <div class="steps">
+          <div class="step fade-in">
+            <div class="step-icon">🎙️</div>
+            <div class="step-num">1</div>
+            <div class="step-title">Log in seconds</div>
+            <div class="step-desc">Say what you ate, scan a barcode, or let AI analyze a description. No manual searching required.</div>
+          </div>
+          <div class="step fade-in">
+            <div class="step-icon">📊</div>
+            <div class="step-num">2</div>
+            <div class="step-title">Track everything</div>
+            <div class="step-desc">Calories, macros, sleep, mood, steps, workouts — all in one dashboard that updates in real time.</div>
+          </div>
+          <div class="step fade-in">
+            <div class="step-icon">🏆</div>
+            <div class="step-num">3</div>
+            <div class="step-title">Level up</div>
+            <div class="step-desc">Earn XP for every log, complete daily missions, grow your streak, and unlock app features as you progress.</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- TAB PREVIEW -->
+  <section class="tabs-section section-pad" id="tabs">
+    <div class="container">
+      <p class="section-label fade-in">App preview</p>
+      <h2 class="section-title fade-in">Everything in one app</h2>
+      <div class="divider fade-in"></div>
+
+      <div class="tab-nav fade-in">
+        <button class="tab-btn active" data-tab="home">🏠 Home</button>
+        <button class="tab-btn" data-tab="trends">📈 Trends</button>
+        <button class="tab-btn" data-tab="smart">🤖 Smart</button>
+        <button class="tab-btn" data-tab="social">👥 Social</button>
+        <button class="tab-btn" data-tab="settings">⚙️ Settings</button>
+      </div>
+
+      <!-- HOME TAB -->
+      <div class="tab-content active" id="tab-home">
+        <div class="tab-info">
+          <h3>Home Dashboard</h3>
+          <p>Your daily command center. See your calorie budget ring, today's food and exercise log, macros, and real-time progress — all at a glance.</p>
+          <div class="tab-features">
+            <div class="tab-feat">Live calorie budget ring (in vs out)</div>
+            <div class="tab-feat">One-tap food logging with AI</div>
+            <div class="tab-feat">Daily missions & XP progress</div>
+            <div class="tab-feat">Sleep, mood & step widgets</div>
+            <div class="tab-feat">Customizable widget layout</div>
+          </div>
+        </div>
+        <div class="tab-screen">
+          <div class="ts-header">🏠 Home</div>
+          <div class="ts-card">
+            <div class="ts-card-title">CALORIE BUDGET</div>
+            <div class="ts-bar"><div class="ts-bar-fill" style="width:38%"></div></div>
+            <div class="ts-row"><span class="ts-label">580 consumed</span><span class="ts-val orange">1,420 left</span></div>
+          </div>
+          <div class="ts-card">
+            <div class="ts-card-title">TODAY'S LOG</div>
+            <div class="ts-row"><span class="ts-label">🥗 Chicken Salad</span><span class="ts-val">420 kcal</span></div>
+            <div class="ts-row" style="margin-top:6px"><span class="ts-label">☕ Black Coffee</span><span class="ts-val">2 kcal</span></div>
+          </div>
+          <div class="ts-card">
+            <div class="ts-card-title">DAILY MISSIONS</div>
+            <div class="ts-mission"><span class="ts-m-icon">💧</span><div class="ts-m-info"><div class="ts-m-name">Drink 6 glasses</div><div class="ts-m-prog">4/6 done</div></div><span class="ts-m-xp">+30 XP</span></div>
+            <div class="ts-mission"><span class="ts-m-icon">🔥</span><div class="ts-m-info"><div class="ts-m-name">Log 3 meals</div><div class="ts-m-prog">1/3 done</div></div><span class="ts-m-xp">+50 XP</span></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- TRENDS TAB -->
+      <div class="tab-content" id="tab-trends">
+        <div class="tab-info">
+          <h3>Trends & Analytics</h3>
+          <p>Visualize your nutrition and wellness patterns over time. Weekly and monthly charts help you understand what's working and where to improve.</p>
+          <div class="tab-features">
+            <div class="tab-feat">7-day calorie & macro charts</div>
+            <div class="tab-feat">Sleep and mood trend graphs</div>
+            <div class="tab-feat">Weight progression tracking</div>
+            <div class="tab-feat">Goal hit rate analytics</div>
+            <div class="tab-feat">Weekly & monthly summaries</div>
+          </div>
+        </div>
+        <div class="tab-screen">
+          <div class="ts-header">📈 Trends</div>
+          <div class="ts-card">
+            <div class="ts-card-title">CALORIES THIS WEEK</div>
+            <div class="ts-chart">
+              <div class="ts-bar-v" style="height:50%"></div>
+              <div class="ts-bar-v" style="height:70%"></div>
+              <div class="ts-bar-v active" style="height:45%"></div>
+              <div class="ts-bar-v" style="height:80%"></div>
+              <div class="ts-bar-v active" style="height:60%"></div>
+              <div class="ts-bar-v" style="height:35%"></div>
+              <div class="ts-bar-v active" style="height:55%"></div>
+            </div>
+            <div class="ts-row" style="margin-top:8px"><span class="ts-label">Avg 1,640 kcal/day</span><span class="ts-val green">On track</span></div>
+          </div>
+          <div class="ts-card">
+            <div class="ts-card-title">MACROS BREAKDOWN</div>
+            <div class="ts-row"><span class="ts-label">Protein</span><span class="ts-val green">128g avg</span></div>
+            <div class="ts-row"><span class="ts-label">Carbs</span><span class="ts-val">198g avg</span></div>
+            <div class="ts-row"><span class="ts-label">Fat</span><span class="ts-val">52g avg</span></div>
+          </div>
+          <div class="ts-card">
+            <div class="ts-card-title">SLEEP THIS WEEK</div>
+            <div class="ts-row"><span class="ts-label">Avg sleep</span><span class="ts-val">7.2h</span></div>
+            <div class="ts-row"><span class="ts-label">Goal hit rate</span><span class="ts-val green">5/7 nights</span></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- SMART TAB -->
+      <div class="tab-content" id="tab-smart">
+        <div class="tab-info">
+          <h3>Smart AI Features</h3>
+          <p>The AI-powered hub of in/out. Log food with your voice, analyze meals from descriptions, scan barcodes, and get personalized nutrition insights.</p>
+          <div class="tab-features">
+            <div class="tab-feat">Voice food logging ("I had a large bowl of pasta")</div>
+            <div class="tab-feat">Natural language meal analysis</div>
+            <div class="tab-feat">Barcode scanner with 380K+ products</div>
+            <div class="tab-feat">Restaurant menu analysis</div>
+            <div class="tab-feat">7-day free trial · $4/mo after</div>
+          </div>
+        </div>
+        <div class="tab-screen">
+          <div class="ts-header">🤖 Smart Log</div>
+          <div class="ts-card" style="background: linear-gradient(135deg, rgba(249,115,22,.15), rgba(236,72,153,.15)); border: 1px solid rgba(249,115,22,.2);">
+            <div class="ts-card-title" style="color:#f97316">AI FOOD ANALYSIS</div>
+            <div style="font-size:12px;color:#ccc;margin-top:4px;">"Large bowl of pasta bolognese with garlic bread"</div>
+            <div class="ts-row" style="margin-top:10px"><span class="ts-label">Calories</span><span class="ts-val orange">840 kcal</span></div>
+            <div class="ts-row"><span class="ts-label">Protein</span><span class="ts-val">32g</span></div>
+            <div class="ts-row"><span class="ts-label">Carbs</span><span class="ts-val">98g</span></div>
+          </div>
+          <div class="ts-card">
+            <div class="ts-card-title">AI LOGS TODAY</div>
+            <div class="ts-bar"><div class="ts-bar-fill" style="width:60%"></div></div>
+            <div class="ts-row"><span class="ts-label">3 of 5 free logs used</span><span class="ts-val orange">Upgrade for unlimited</span></div>
+          </div>
+          <div class="ts-card">
+            <div style="display:flex;gap:6px;flex-wrap:wrap">
+              <span class="ts-tag">🎙️ Voice Log</span>
+              <span class="ts-tag">📷 Barcode</span>
+              <span class="ts-tag">🍔 Restaurant</span>
+              <span class="ts-tag">✏️ Manual</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- SOCIAL TAB -->
+      <div class="tab-content" id="tab-social">
+        <div class="tab-info">
+          <h3>Social Community</h3>
+          <p>Share wins, connect with others on the same journey, browse expert articles, and follow coaches — a full community built right into the app.</p>
+          <div class="tab-features">
+            <div class="tab-feat">Community forum with categories</div>
+            <div class="tab-feat">Share wins and progress</div>
+            <div class="tab-feat">Expert health & nutrition articles</div>
+            <div class="tab-feat">Recipe library (AI-powered)</div>
+            <div class="tab-feat">Coaches tab for guidance</div>
+          </div>
+        </div>
+        <div class="tab-screen">
+          <div class="ts-header">👥 Social</div>
+          <div class="ts-card">
+            <div class="ts-card-title">COMMUNITY FEED</div>
+            <div class="ts-forum-post">
+              <div class="ts-forum-user">@alex_fit</div>
+              <div class="ts-forum-text">Hit my 30-day streak today! 🔥 Feeling unstoppable. Who else is on a streak?</div>
+            </div>
+            <div class="ts-forum-post">
+              <div class="ts-forum-user">@maria_wellness</div>
+              <div class="ts-forum-text">Just tried the AI voice logging feature... it's actually incredible 😍</div>
+            </div>
+          </div>
+          <div class="ts-card">
+            <div class="ts-card-title">TRENDING ARTICLES</div>
+            <div class="ts-row"><span class="ts-label">📰 5 High-Protein Breakfast Ideas</span></div>
+            <div class="ts-row" style="margin-top:6px"><span class="ts-label">📰 Why Sleep Affects Your Hunger</span></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- SETTINGS TAB -->
+      <div class="tab-content" id="tab-settings">
+        <div class="tab-info">
+          <h3>Settings & Profile</h3>
+          <p>Customize every aspect of in/out — your goals, macros, themes, connected devices, and profile. Full control over your experience.</p>
+          <div class="tab-features">
+            <div class="tab-feat">Goal mode (lose / maintain / gain)</div>
+            <div class="tab-feat">Custom macro targets</div>
+            <div class="tab-feat">10+ app themes</div>
+            <div class="tab-feat">Wearable device connections</div>
+            <div class="tab-feat">Data export (CSV) — Pro</div>
+          </div>
+        </div>
+        <div class="tab-screen">
+          <div class="ts-header">⚙️ Settings</div>
+          <div class="ts-card">
+            <div class="ts-card-title">PROFILE</div>
+            <div class="ts-row"><span class="ts-label">Goal mode</span><span class="ts-val">Lose weight</span></div>
+            <div class="ts-row"><span class="ts-label">Daily goal</span><span class="ts-val">1,600 kcal</span></div>
+            <div class="ts-row"><span class="ts-label">Activity level</span><span class="ts-val">Moderate</span></div>
+          </div>
+          <div class="ts-card">
+            <div class="ts-card-title">APPEARANCE</div>
+            <div style="display:flex;gap:6px;flex-wrap:wrap;margin-top:4px">
+              <span class="ts-tag" style="background:rgba(249,115,22,.3)">🌅 Sunset</span>
+              <span class="ts-tag">🌊 Ocean</span>
+              <span class="ts-tag">🌙 Midnight</span>
+              <span class="ts-tag">🌿 Forest</span>
+            </div>
+          </div>
+          <div class="ts-card">
+            <div class="ts-card-title">CONNECTED DEVICES</div>
+            <div class="ts-row"><span class="ts-label">Apple Watch</span><span class="ts-val green">Connected</span></div>
+            <div class="ts-row"><span class="ts-label">Withings Scale</span><span class="ts-val green">Connected</span></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- FEATURES -->
+  <section class="section-pad" id="features">
+    <div class="container">
+      <p class="section-label fade-in">Features</p>
+      <h2 class="section-title fade-in">Everything you need to stay on track</h2>
+      <div class="divider fade-in"></div>
+      <div class="features-grid">
+        <div class="feature-card fade-in"><div class="feature-icon">🎙️</div><div class="feature-title">Voice & AI Food Logging</div><div class="feature-desc">Say what you ate and AI instantly calculates calories, protein, carbs, and fat. No manual searching.</div><span class="feature-tag">AI Powered</span></div>
+        <div class="feature-card fade-in"><div class="feature-icon">📷</div><div class="feature-title">Barcode Scanner</div><div class="feature-desc">Scan any packaged food barcode and get instant nutrition info from a 380K+ product database.</div><span class="feature-tag">Instant</span></div>
+        <div class="feature-card fade-in"><div class="feature-icon">🔥</div><div class="feature-title">Calorie & Macro Tracking</div><div class="feature-desc">Track calories in vs out with a real-time budget ring. Set custom macro targets for protein, carbs, and fat.</div><span class="feature-tag">Core Feature</span></div>
+        <div class="feature-card fade-in"><div class="feature-icon">📋</div><div class="feature-title">Daily Missions & XP</div><div class="feature-desc">Complete daily missions to earn XP, level up from Rookie to Legend, and unlock features as you progress.</div><span class="feature-tag">Gamified</span></div>
+        <div class="feature-card fade-in"><div class="feature-icon">😴</div><div class="feature-title">Sleep & Mood Tracking</div><div class="feature-desc">Log nightly sleep and daily mood. See how rest connects to your nutrition and fitness goals.</div><span class="feature-tag">Wellness</span></div>
+        <div class="feature-card fade-in"><div class="feature-icon">👟</div><div class="feature-title">Step Counter & Workouts</div><div class="feature-desc">Track daily steps, log workouts from a full exercise database, and see calories burned in real time.</div><span class="feature-tag">Fitness</span></div>
+        <div class="feature-card fade-in"><div class="feature-icon">📈</div><div class="feature-title">Trends & Analytics</div><div class="feature-desc">Weekly and monthly charts for calories, macros, sleep, weight, and mood. Spot patterns instantly.</div><span class="feature-tag">Insights</span></div>
+        <div class="feature-card fade-in"><div class="feature-icon">👥</div><div class="feature-title">Social Feed</div><div class="feature-desc">Share wins, post to the community forum, discover articles, and follow coaches — all inside the app.</div><span class="feature-tag">Community</span></div>
+        <div class="feature-card fade-in"><div class="feature-icon">🔁</div><div class="feature-title">Streak System</div><div class="feature-desc">Build daily logging streaks with freeze tokens to protect your progress. Stay consistent and earn rewards.</div><span class="feature-tag">Habit Building</span></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- PRICING -->
+  <section class="section-pad" style="background: var(--bg2); border-top: 1px solid var(--border);" id="pricing">
+    <div class="container">
+      <p class="section-label fade-in">Pricing</p>
+      <h2 class="section-title fade-in">Simple, honest pricing</h2>
+      <p class="section-sub fade-in">Start free. Upgrade only if you want more.</p>
+      <div class="pricing-grid">
+        <div class="pricing-card fade-in">
+          <div class="pricing-plan">Free</div>
+          <div class="pricing-price">$0</div>
+          <div class="pricing-note">No credit card · forever free</div>
+          <ul class="pricing-features">
+            <li>Full calorie & macro tracking</li>
+            <li>380K+ food database</li>
+            <li>5 AI food logs per day</li>
+            <li>Daily missions & XP</li>
+            <li>Streak tracking</li>
+            <li>Social community</li>
+            <li>Sleep & mood logging</li>
+          </ul>
+          <a href="https://play.google.com/store/apps/details?id=co.inoutapp.android" class="pricing-btn outline">Download Free</a>
+        </div>
+        <div class="pricing-card featured fade-in">
+          <div class="pricing-badge">Most Popular</div>
+          <div class="pricing-plan">Pro</div>
+          <div class="pricing-price"><sup>$</sup>2</div>
+          <div class="pricing-note">One-time · own forever</div>
+          <ul class="pricing-features">
+            <li>Everything in Free</li>
+            <li>Calorie cycling (workout vs rest days)</li>
+            <li>Custom widget layout</li>
+            <li>Data export (CSV)</li>
+            <li>Meal templates</li>
+            <li>Advanced trends & analytics</li>
+            <li>Custom macro targets</li>
+            <li>Unlimited saved meals</li>
+          </ul>
+          <a href="https://play.google.com/store/apps/details?id=co.inoutapp.android" class="pricing-btn solid">Get Pro — $2</a>
+        </div>
+        <div class="pricing-card fade-in">
+          <div class="pricing-plan">AI Add-on</div>
+          <div class="pricing-price"><sup>$</sup>4<sub>/mo</sub></div>
+          <div class="pricing-note">7-day free trial · cancel anytime</div>
+          <ul class="pricing-features">
+            <li>Unlimited AI food analysis</li>
+            <li>Unlimited voice logging</li>
+            <li>Barcode scanner</li>
+            <li>AI nutrition insights</li>
+            <li>Restaurant menu analysis</li>
+          </ul>
+          <a href="https://play.google.com/store/apps/details?id=co.inoutapp.android" class="pricing-btn solid">Start Free Trial</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- REVIEWS CTA -->
+  <section class="section-pad" id="reviews">
+    <div class="container">
+      <p class="section-label fade-in">Reviews</p>
+      <h2 class="section-title fade-in">Be the first to review</h2>
+      <p class="section-sub fade-in">in/out just launched. Download it, try it, and leave an honest review on Google Play. Your feedback shapes what we build next.</p>
+      <div style="display:flex;justify-content:center" class="fade-in">
+        <a href="https://play.google.com/store/apps/details?id=co.inoutapp.android" class="btn-primary">⭐ Leave a Review on Google Play</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- FAQ -->
+  <section class="section-pad" style="background: var(--bg2); border-top: 1px solid var(--border);" id="faq">
+    <div class="container">
+      <p class="section-label fade-in">FAQ</p>
+      <h2 class="section-title fade-in">Common questions</h2>
+      <div class="divider fade-in"></div>
+      <div class="faq-list">
+        <div class="faq-item fade-in">
+          <button class="faq-q">Is in/out really free? <span class="faq-icon">+</span></button>
+          <div class="faq-a"><p>Yes — core calorie and macro tracking is completely free with no time limit. You get 5 AI food logs per day on the free plan. Pro ($2 one-time) and AI subscription ($4/mo) are optional upgrades.</p></div>
+        </div>
+        <div class="faq-item fade-in">
+          <button class="faq-q">How accurate is the AI food logging? <span class="faq-icon">+</span></button>
+          <div class="faq-a"><p>Very accurate for common foods and meals. The AI uses contextual understanding — "large bowl of pasta bolognese" gives you a reasonable estimate based on standard serving sizes. For precise tracking, you can adjust portions after logging.</p></div>
+        </div>
+        <div class="faq-item fade-in">
+          <button class="faq-q">Does it work with my smartwatch or fitness tracker? <span class="faq-icon">+</span></button>
+          <div class="faq-a"><p>Yes — in/out integrates with Android Health Connect, which connects to Apple Watch, Garmin, Fitbit, Oura, Whoop, Samsung Galaxy Watch, and more. Steps and sleep data sync automatically once connected.</p></div>
+        </div>
+        <div class="faq-item fade-in">
+          <button class="faq-q">Can I cancel the AI subscription anytime? <span class="faq-icon">+</span></button>
+          <div class="faq-a"><p>Absolutely. Cancel any time before the 7-day trial ends and you won't be charged. Manage your subscription directly through Google Play.</p></div>
+        </div>
+        <div class="faq-item fade-in">
+          <button class="faq-q">Is my health data private and secure? <span class="faq-icon">+</span></button>
+          <div class="faq-a"><p>Yes. All data is stored securely with row-level security. AI requests are proxied through our backend — no raw health data is ever sent to AI providers. You can delete your account and all data at any time from Settings.</p></div>
+        </div>
+        <div class="faq-item fade-in">
+          <button class="faq-q">Is in/out available on iOS? <span class="faq-icon">+</span></button>
+          <div class="faq-a"><p>Currently Android only. iOS is on the roadmap — follow us for updates.</p></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- EARLY ACCESS -->
+  <section class="early-access" style="border-top: 1px solid var(--border);">
+    <div class="ea-glow"></div>
+    <div class="ea-inner">
+      <div class="ea-label fade-in">🎁 Limited Time</div>
+      <h2 class="ea-title fade-in">Pre-register &amp; get<br/><span>in/out Pro free</span></h2>
+      <p class="ea-sub fade-in">Pre-register on Google Play before launch and we'll unlock in/out Pro in your account — permanently, at no charge.</p>
+      <div class="ea-buttons fade-in">
+        <a href="https://play.google.com/store/apps/details?id=co.inoutapp.android" class="btn-primary">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="white"><path d="M3 20.5v-17c0-.83 1.01-1.28 1.6-.7l14 8.5c.53.32.53 1.08 0 1.4l-14 8.5c-.59.58-1.6.13-1.6-.7z"/></svg>
+          Pre-register on Google Play
+        </a>
+        <a href="/terms" class="btn-ghost">View Early Access Terms →</a>
+      </div>
+      <div class="ea-badge-row fade-in">
+        <img src="logo.svg" alt="in/out Pro badge" class="ea-badge-img" style="background:linear-gradient(135deg,#f97316,#ec4899);padding:10px;" />
+        <div class="ea-badge-text">
+          <strong>in/out Pro — included free</strong>
+          One-time purchase · yours forever · no credit card needed
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer>
+    <div class="footer-inner">
+      <a href="/" class="logo">
+        <div class="logo-icon"><img src="logo.svg" alt="in/out" style="width:100%;height:100%;display:block;" /></div>
+        <span class="logo-text">in/out</span>
+      </a>
+      <div class="footer-links">
+        <a href="/privacy">Privacy Policy</a>
+        <a href="/terms">Terms &amp; Conditions</a>
+        <a href="mailto:support@inoutcc.app">Contact</a>
+        <a href="https://play.google.com/store/apps/details?id=co.inoutapp.android">Google Play</a>
+      </div>
+      <p class="footer-copy">© 2026 in/out. All rights reserved.</p>
+    </div>
+  </footer>
+
+  <!-- MOBILE STICKY BANNER -->
+  <div class="sticky-banner">
+    <div>
+      <div class="sb-text">in/out: Calorie Companion<span>Free on Android</span></div>
+    </div>
+    <a href="https://play.google.com/store/apps/details?id=co.inoutapp.android" class="sb-btn">Download Free</a>
+  </div>
+
+  <script>
+    // Dark mode toggle
+    const toggle = document.getElementById('themeToggle');
+    const html = document.documentElement;
+    const saved = localStorage.getItem('theme') || 'dark';
+    html.setAttribute('data-theme', saved);
+    toggle.textContent = saved === 'dark' ? '☀️' : '🌙';
+
+    toggle.addEventListener('click', () => {
+      const current = html.getAttribute('data-theme');
+      const next = current === 'dark' ? 'light' : 'dark';
+      html.setAttribute('data-theme', next);
+      localStorage.setItem('theme', next);
+      toggle.textContent = next === 'dark' ? '☀️' : '🌙';
+    });
+
+    // Tab switcher
+    document.querySelectorAll('.tab-btn').forEach(btn => {
+      btn.addEventListener('click', () => {
+        document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+        document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
+        btn.classList.add('active');
+        document.getElementById('tab-' + btn.dataset.tab).classList.add('active');
+      });
+    });
+
+    // FAQ accordion
+    document.querySelectorAll('.faq-q').forEach(btn => {
+      btn.addEventListener('click', () => {
+        const item = btn.closest('.faq-item');
+        const isOpen = item.classList.contains('open');
+        document.querySelectorAll('.faq-item').forEach(i => i.classList.remove('open'));
+        if (!isOpen) item.classList.add('open');
+      });
+    });
+
+    // Phone carousel
+    const carousel = document.getElementById('phoneCarousel');
+    if (carousel) {
+      const slides = carousel.querySelectorAll('.phone-slide');
+      const total = slides.length;
+      let cur = 0;
+
+      // Build dots in first slide
+      const dotRow = document.getElementById('dotRow');
+      if (dotRow) {
+        for (let i = 0; i < total; i++) {
+          const d = document.createElement('div');
+          d.className = 'ps-dot' + (i === 0 ? ' active' : '');
+          dotRow.appendChild(d);
+        }
+      }
+
+      function goTo(next) {
+        slides[cur].classList.remove('active');
+        slides[cur].classList.add('exit');
+        slides[next].classList.add('active');
+        const prev = cur;
+        cur = next;
+        if (dotRow) {
+          dotRow.querySelectorAll('.ps-dot').forEach((d, i) => d.classList.toggle('active', i === cur));
+        }
+        setTimeout(() => slides[prev].classList.remove('exit'), 700);
+      }
+
+      setInterval(() => goTo((cur + 1) % total), 3600);
+    }
+
+    // Scroll fade-in
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach((e, i) => {
+        if (e.isIntersecting) {
+          setTimeout(() => e.target.classList.add('visible'), i * 80);
+          observer.unobserve(e.target);
+        }
+      });
+    }, { threshold: 0.1 });
+    document.querySelectorAll('.fade-in').forEach(el => observer.observe(el));
+  </script>
+</body>
+</html>

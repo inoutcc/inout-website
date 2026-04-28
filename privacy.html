@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Privacy Policy — in/out</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;900&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body { font-family: 'Inter', system-ui, sans-serif; background: #0f0f0f; color: #f1f1f1; line-height: 1.7; }
+    nav { position: sticky; top: 0; backdrop-filter: blur(12px); background: rgba(15,15,15,0.85); border-bottom: 1px solid #2a2a2a; }
+    .nav-inner { max-width: 800px; margin: 0 auto; padding: 0 24px; height: 60px; display: flex; align-items: center; justify-content: space-between; }
+    .logo { display: flex; align-items: center; gap: 10px; text-decoration: none; }
+    .logo-icon { width: 32px; height: 32px; border-radius: 0; overflow: visible; background: transparent; flex-shrink: 0; }
+    .logo-text { font-weight: 900; font-size: 18px; background: linear-gradient(135deg, #f97316, #ec4899); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+    .back { color: #888; text-decoration: none; font-size: 14px; }
+    .back:hover { color: #f1f1f1; }
+    .content { max-width: 800px; margin: 0 auto; padding: 60px 24px 80px; }
+    h1 { font-size: 2.2rem; font-weight: 900; margin-bottom: 8px; }
+    .updated { font-size: 14px; color: #888; margin-bottom: 48px; }
+    h2 { font-size: 1.1rem; font-weight: 700; margin: 36px 0 12px; color: #f97316; }
+    p, li { font-size: 15px; color: #ccc; margin-bottom: 12px; }
+    ul { padding-left: 20px; margin-bottom: 12px; }
+    a { color: #f97316; }
+    strong { color: #f1f1f1; }
+  </style>
+</head>
+<body>
+  <nav>
+    <div class="nav-inner">
+      <a href="/" class="logo">
+        <div class="logo-icon"><img src="logo.svg" alt="in/out" style="width:100%;height:100%;display:block;" /></div>
+        <span class="logo-text">in/out</span>
+      </a>
+      <a href="/" class="back">← Back to home</a>
+    </div>
+  </nav>
+
+  <div class="content">
+    <h1>Privacy Policy</h1>
+    <p class="updated">Last updated: April 27, 2026</p>
+
+    <p>in/out ("we", "us", or "our") operates the in/out: Calorie Companion mobile application. This page informs you of our policies regarding the collection, use, and disclosure of personal data when you use our app.</p>
+
+    <h2>1. Information We Collect</h2>
+    <p>We collect the following types of information:</p>
+    <ul>
+      <li><strong>Account information:</strong> Email address and display name when you create an account via email or Google Sign-In.</li>
+      <li><strong>Health & nutrition data:</strong> Food logs, calorie entries, exercise records, weight logs, sleep data, mood entries, and step counts that you manually enter or import.</li>
+      <li><strong>Profile data:</strong> Age, height, weight, sex, and activity level you provide to calculate calorie goals and BMR.</li>
+      <li><strong>Usage data:</strong> App interactions, feature usage, and anonymous analytics to improve the app.</li>
+      <li><strong>Device information:</strong> Device type, operating system version, and app version for crash reporting and support.</li>
+    </ul>
+
+    <h2>2. How We Use Your Information</h2>
+    <ul>
+      <li>To provide and maintain the app's core features</li>
+      <li>To calculate personalized calorie goals, BMR, and nutrition insights</li>
+      <li>To sync your data across sessions via Supabase (our backend provider)</li>
+      <li>To process AI food analysis requests via our secure Edge Function proxy</li>
+      <li>To send optional email notifications (daily briefs, if enabled)</li>
+      <li>To improve the app based on aggregated usage patterns</li>
+    </ul>
+
+    <h2>3. Data Storage & Security</h2>
+    <p>Your data is stored securely in Supabase (supabase.com), which provides row-level security and encryption at rest and in transit. We use HTTPS for all network communication. API keys are never exposed to the client — all AI requests are proxied through our secure backend.</p>
+    <p>Local data is also stored on your device via localStorage and is not shared with third parties.</p>
+
+    <h2>4. Third-Party Services</h2>
+    <ul>
+      <li><strong>Supabase</strong> — database and authentication (<a href="https://supabase.com/privacy">supabase.com/privacy</a>)</li>
+      <li><strong>Anthropic Claude API</strong> — AI food analysis, accessed via our backend proxy only (<a href="https://www.anthropic.com/privacy">anthropic.com/privacy</a>)</li>
+      <li><strong>Google Sign-In</strong> — optional OAuth login (<a href="https://policies.google.com/privacy">policies.google.com/privacy</a>)</li>
+      <li><strong>RevenueCat</strong> — in-app purchase management (<a href="https://www.revenuecat.com/privacy">revenuecat.com/privacy</a>)</li>
+      <li><strong>Open Food Facts</strong> — barcode food database (<a href="https://world.openfoodfacts.org/privacy">openfoodfacts.org/privacy</a>)</li>
+      <li><strong>PostHog</strong> — anonymous usage analytics (<a href="https://posthog.com/privacy">posthog.com/privacy</a>)</li>
+      <li><strong>Spoonacular</strong> — recipe data (<a href="https://spoonacular.com/food-api/terms">spoonacular.com/food-api/terms</a>)</li>
+    </ul>
+
+    <h2>5. Connected Fitness Services</h2>
+    <p>In/out optionally connects to third-party fitness platforms to import health data directly into your dashboard. You must explicitly authorize each connection via that service's secure OAuth login. The following services may be connected:</p>
+    <ul>
+      <li><strong>Fitbit</strong> (<a href="https://www.fitbit.com/legal/privacy-policy">fitbit.com/legal/privacy-policy</a>)</li>
+      <li><strong>Strava</strong> (<a href="https://www.strava.com/legal/privacy">strava.com/legal/privacy</a>)</li>
+      <li><strong>Withings</strong> (<a href="https://www.withings.com/us/en/legal/privacy-policy">withings.com</a>)</li>
+      <li><strong>Oura Ring</strong> (<a href="https://ouraring.com/privacy-policy">ouraring.com/privacy-policy</a>)</li>
+      <li><strong>WHOOP</strong> (<a href="https://www.whoop.com/privacy-policy/">whoop.com/privacy-policy</a>)</li>
+      <li><strong>Garmin</strong> (<a href="https://www.garmin.com/en-US/privacy/app-privacy/">garmin.com/privacy</a>)</li>
+      <li><strong>Samsung Health</strong> (<a href="https://www.samsung.com/us/account/privacy-policy/">samsung.com/privacy</a>)</li>
+    </ul>
+    <p>For each connected service, we collect only the data you explicitly authorize and only the minimum scopes required to display information in your dashboard (steps, heart rate, sleep, weight, and activity summaries). Specifically:</p>
+    <ul>
+      <li>Data from Fitbit and other connected services is <strong>not sold</strong> to any third party.</li>
+      <li>Data from Fitbit and other connected services is <strong>not used for advertising</strong> or marketing profiling.</li>
+      <li>Data is stored securely in your personal Supabase account and is never shared with other users or external services.</li>
+      <li>You may revoke access at any time from Settings → Connected Services → Unlink. Revoking access removes your stored token immediately.</li>
+      <li>We comply with each connected platform's API terms of service and developer policies.</li>
+    </ul>
+
+    <h2>6. AI Features & Data</h2>
+    <p>When you use voice logging, barcode scanning, or AI food analysis, your food description or query is sent to the Anthropic Claude API via our secure backend proxy. We do not store AI query content beyond what is necessary to return the response. No personal health data is sent to AI providers.</p>
+
+    <h2>7. Health Data</h2>
+    <p>If you connect a wearable device or grant health permissions, step count and sleep data may be read from Android Health Connect or connected third-party services. This data is used solely within the app to populate your fitness dashboard and is never sold or shared with advertisers.</p>
+
+    <h2>8. Data Retention & Deletion</h2>
+    <p>You may delete your account and all associated data at any time from Settings → Account → Delete Account. Upon deletion, all personal data is permanently removed from our servers within 30 days. Disconnecting a fitness service (Settings → Connected Services → Unlink) removes only the stored access token; any data already imported remains in your account until account deletion.</p>
+
+    <h2>9. Children's Privacy</h2>
+    <p>in/out is not directed to children under 13. We do not knowingly collect personal information from children under 13. If you believe your child has provided us with personal data, please contact us to have it removed.</p>
+
+    <h2>10. Changes to This Policy</h2>
+    <p>We may update this Privacy Policy from time to time. We will notify you of any significant changes by updating the "Last updated" date at the top of this page. Continued use of the app after changes constitutes acceptance of the updated policy.</p>
+
+    <h2>11. Contact Us</h2>
+    <p>If you have questions about this Privacy Policy, please contact us at: <a href="mailto:privacy@inoutcc.app">privacy@inoutcc.app</a></p>
+  </div>
+</body>
+</html>
