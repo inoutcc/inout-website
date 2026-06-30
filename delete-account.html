@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Delete Your Account — in/out</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;900&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body { font-family: 'Inter', system-ui, sans-serif; background: #0f0f0f; color: #f1f1f1; line-height: 1.7; }
+    nav { position: sticky; top: 0; backdrop-filter: blur(12px); background: rgba(15,15,15,0.85); border-bottom: 1px solid #2a2a2a; }
+    .nav-inner { max-width: 800px; margin: 0 auto; padding: 0 24px; height: 60px; display: flex; align-items: center; justify-content: space-between; }
+    .logo { display: flex; align-items: center; gap: 10px; text-decoration: none; }
+    .logo-icon { width: 32px; height: 32px; border-radius: 0; overflow: visible; background: transparent; flex-shrink: 0; }
+    .logo-text { font-weight: 900; font-size: 18px; background: linear-gradient(135deg, #f97316, #ec4899); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+    .back { color: #888; text-decoration: none; font-size: 14px; }
+    .back:hover { color: #f1f1f1; }
+    .content { max-width: 800px; margin: 0 auto; padding: 60px 24px 80px; }
+    h1 { font-size: 2.2rem; font-weight: 900; margin-bottom: 8px; }
+    .updated { font-size: 14px; color: #888; margin-bottom: 48px; }
+    h2 { font-size: 1.1rem; font-weight: 700; margin: 36px 0 12px; color: #f97316; }
+    p, li { font-size: 15px; color: #ccc; margin-bottom: 12px; }
+    ul, ol { padding-left: 20px; margin-bottom: 12px; }
+    ol li { margin-bottom: 8px; }
+    a { color: #f97316; }
+    strong { color: #f1f1f1; }
+    .card { background: #1a1a1a; border: 1px solid #2a2a2a; border-radius: 14px; padding: 18px 22px; margin: 24px 0; }
+  </style>
+</head>
+<body>
+  <nav>
+    <div class="nav-inner">
+      <a href="/" class="logo">
+        <div class="logo-icon"><img src="logo.svg" alt="in/out" style="width:100%;height:100%;display:block;" /></div>
+        <span class="logo-text">in/out</span>
+      </a>
+      <a href="/" class="back">← Back to home</a>
+    </div>
+  </nav>
+
+  <div class="content">
+    <h1>Delete Your Account</h1>
+    <p class="updated">Last updated: June 30, 2026</p>
+
+    <p>in/out ("we", "us", or "our") gives you full control over your data. You can permanently delete your account and all associated data at any time, directly within the app. This page explains how, and exactly what is removed.</p>
+
+    <div class="card">
+      <strong>App:</strong> in/out: Calorie Companion<br />
+      <strong>Developer:</strong> in/out<br />
+      <strong>Package:</strong> co.inoutapp.android
+    </div>
+
+    <h2>How to delete your account in the app</h2>
+    <ol>
+      <li>Open the <strong>in/out</strong> app and make sure you are signed in.</li>
+      <li>Go to the <strong>Settings</strong> tab.</li>
+      <li>Scroll to the bottom and tap <strong>Delete Account</strong>.</li>
+      <li>Type <strong>DELETE</strong> in the confirmation box and tap <strong>Delete My Account</strong>.</li>
+    </ol>
+    <p>Your account is deleted immediately and you are signed out. <strong>This action cannot be undone.</strong></p>
+
+    <h2>What gets deleted</h2>
+    <p>Deleting your account permanently removes:</p>
+    <ul>
+      <li>Your account and login credentials (email, sign-in identity)</li>
+      <li>Your profile (display name, username, bio, avatar, age, height, weight, activity level)</li>
+      <li>All food, drink, and calorie logs</li>
+      <li>Weight, body-metric, sleep, mood, vitamin, and step logs</li>
+      <li>Goals, daily summaries, XP, streaks, badges, and missions</li>
+      <li>Saved meals, recipes, and workout routines</li>
+      <li>Social data — posts, follows, pods, challenges, and coaching relationships</li>
+    </ul>
+
+    <h2>Data retention</h2>
+    <p>Your account login and personal records are removed from our live systems immediately upon deletion. Any residual copies in encrypted backups are purged within <strong>30 days</strong>. We do not retain your personal health data after deletion, and we never sell or share it.</p>
+
+    <h2>If you can't access the app</h2>
+    <p>If you are unable to sign in or open the app, you can still request account and data deletion by emailing <a href="mailto:inoutsupport@proton.me">inoutsupport@proton.me</a> from the email address associated with your account, with the subject line <strong>"Delete my account"</strong>. We will verify ownership and complete the deletion within 30 days.</p>
+
+    <p style="margin-top:32px;">For more on how we handle your information, see our <a href="/privacy">Privacy Policy</a>.</p>
+  </div>
+</body>
+</html>
