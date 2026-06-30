@@ -39,7 +39,7 @@
 
   <div class="content">
     <h1>Privacy Policy</h1>
-    <p class="updated">Last updated: April 27, 2026</p>
+    <p class="updated">Last updated: June 30, 2026</p>
 
     <p>in/out ("we", "us", or "our") operates the in/out: Calorie Companion mobile application. This page informs you of our policies regarding the collection, use, and disclosure of personal data when you use our app.</p>
 
@@ -47,31 +47,36 @@
     <p>We collect the following types of information:</p>
     <ul>
       <li><strong>Account information:</strong> Email address and display name when you create an account via email or Google Sign-In.</li>
-      <li><strong>Health & nutrition data:</strong> Food logs, calorie entries, exercise records, weight logs, sleep data, mood entries, and step counts that you manually enter or import.</li>
-      <li><strong>Profile data:</strong> Age, height, weight, sex, and activity level you provide to calculate calorie goals and BMR.</li>
+      <li><strong>Profile data:</strong> Age, height, weight, sex, activity level, username, bio, and avatar you provide to calculate calorie goals and BMR and to identify you in social features.</li>
+      <li><strong>Health &amp; nutrition data:</strong> Food and drink logs, calorie entries, exercise records, weight logs, sleep data, mood entries, water intake, vitamins, and step counts that you manually enter or import.</li>
+      <li><strong>User-generated content:</strong> Posts, comments, forum messages, shared recipes, challenge entries, and messages you send through community and coaching features.</li>
+      <li><strong>Social connections:</strong> Follows, accountability pods, challenges, leagues, referrals, and coaching relationships you create.</li>
       <li><strong>Usage data:</strong> App interactions, feature usage, and anonymous analytics to improve the app.</li>
-      <li><strong>Device information:</strong> Device type, operating system version, and app version for crash reporting and support.</li>
+      <li><strong>Device &amp; technical information:</strong> Device type, operating system version, app version, and a push-notification token, used for crash reporting, support, and delivering notifications you have enabled.</li>
     </ul>
 
     <h2>2. How We Use Your Information</h2>
     <ul>
       <li>To provide and maintain the app's core features</li>
       <li>To calculate personalized calorie goals, BMR, and nutrition insights</li>
+      <li>To power social and community features (feeds, forums, pods, challenges, leagues, referrals)</li>
+      <li>To enable coaching relationships and the AI Coach when you choose to use them</li>
       <li>To sync your data across sessions via Supabase (our backend provider)</li>
-      <li>To process AI food analysis requests via our secure Edge Function proxy</li>
-      <li>To send optional email notifications (daily briefs, if enabled)</li>
+      <li>To process AI food analysis and AI Coach requests via our secure Edge Function proxy</li>
+      <li>To send push notifications and optional email notifications (e.g., reminders and daily briefs) that you can disable at any time</li>
       <li>To improve the app based on aggregated usage patterns</li>
     </ul>
 
-    <h2>3. Data Storage & Security</h2>
+    <h2>3. Data Storage &amp; Security</h2>
     <p>Your data is stored securely in Supabase (supabase.com), which provides row-level security and encryption at rest and in transit. We use HTTPS for all network communication. API keys are never exposed to the client — all AI requests are proxied through our secure backend.</p>
     <p>Local data is also stored on your device via localStorage and is not shared with third parties.</p>
 
     <h2>4. Third-Party Services</h2>
     <ul>
       <li><strong>Supabase</strong> — database and authentication (<a href="https://supabase.com/privacy">supabase.com/privacy</a>)</li>
-      <li><strong>Anthropic Claude API</strong> — AI food analysis, accessed via our backend proxy only (<a href="https://www.anthropic.com/privacy">anthropic.com/privacy</a>)</li>
+      <li><strong>Anthropic Claude API</strong> — AI food analysis and AI Coach, accessed via our backend proxy only (<a href="https://www.anthropic.com/privacy">anthropic.com/privacy</a>)</li>
       <li><strong>Google Sign-In</strong> — optional OAuth login (<a href="https://policies.google.com/privacy">policies.google.com/privacy</a>)</li>
+      <li><strong>Firebase Cloud Messaging</strong> — push notification delivery (<a href="https://firebase.google.com/support/privacy">firebase.google.com/support/privacy</a>)</li>
       <li><strong>RevenueCat</strong> — in-app purchase management (<a href="https://www.revenuecat.com/privacy">revenuecat.com/privacy</a>)</li>
       <li><strong>Open Food Facts</strong> — barcode food database (<a href="https://world.openfoodfacts.org/privacy">openfoodfacts.org/privacy</a>)</li>
       <li><strong>PostHog</strong> — anonymous usage analytics (<a href="https://posthog.com/privacy">posthog.com/privacy</a>)</li>
@@ -98,22 +103,33 @@
       <li>We comply with each connected platform's API terms of service and developer policies.</li>
     </ul>
 
-    <h2>6. AI Features & Data</h2>
-    <p>When you use voice logging, barcode scanning, or AI food analysis, your food description or query is sent to the Anthropic Claude API via our secure backend proxy. We do not store AI query content beyond what is necessary to return the response. No personal health data is sent to AI providers.</p>
+    <h2>6. Social Features &amp; Content Visibility</h2>
+    <p>in/out includes community features such as a public feed, forums, shared recipes, accountability pods, challenges, and leagues. Content you choose to post — including your display name, username, avatar, and the text or recipes you share — may be visible to other users, and public posts may be visible to anyone using the app. Please do not include sensitive personal information in content you post publicly.</p>
+    <p>You can delete your own posts at any time, and some content (such as the public feed) expires automatically. We may review, moderate, or remove content that violates our Terms &amp; Conditions, and certain content is screened by automated safety filters.</p>
 
-    <h2>7. Health Data</h2>
+    <h2>7. Coaching &amp; Data Sharing With Other Users</h2>
+    <p>If you choose to connect with a coach — or act as a coach — you authorize in/out to share a specific, limited set of your data (such as selected logs and progress trends) with that coach so they can provide coaching to you. This sharing is scoped to what you approve and can be ended by removing the coaching relationship. Coaches are independent users, not employees of in/out, and you are responsible for choosing whom you share data with.</p>
+    <p>The AI Coach feature uses your own logged data (such as recent summaries, weight, and goals) to generate personalized responses through our secure AI proxy. This data is processed to produce your response and is not shared with other users.</p>
+
+    <h2>8. AI Features &amp; Data</h2>
+    <p>When you use AI features (voice logging, barcode scanning, AI food analysis, or the AI Coach), the text you provide — such as food descriptions, questions, and the relevant context needed to answer them — is sent to the Anthropic Claude API via our secure backend proxy. We do not send your name, email address, or account identifiers to the AI provider. Under Anthropic's commercial terms, this data is not used to train their models. AI responses are estimates and may not be fully accurate.</p>
+
+    <h2>9. Health Data</h2>
     <p>If you connect a wearable device or grant health permissions, step count and sleep data may be read from Android Health Connect or connected third-party services. This data is used solely within the app to populate your fitness dashboard and is never sold or shared with advertisers.</p>
 
-    <h2>8. Data Retention & Deletion</h2>
-    <p>You may delete your account and all associated data at any time from Settings → Account → Delete Account. Upon deletion, all personal data is permanently removed from our servers within 30 days. Disconnecting a fitness service (Settings → Connected Services → Unlink) removes only the stored access token; any data already imported remains in your account until account deletion.</p>
+    <h2>10. Your Rights &amp; Choices</h2>
+    <p>You have the right to access, correct, export, or delete your personal data. You can edit your profile and most data directly in the app, and you can delete your entire account at any time (see Section 11). We do not sell your personal information. To exercise any of these rights, contact us at <a href="mailto:inoutsupport@proton.me">inoutsupport@proton.me</a>.</p>
 
-    <h2>9. Children's Privacy</h2>
+    <h2>11. Data Retention &amp; Deletion</h2>
+    <p>You may delete your account and all associated data at any time from <strong>Settings → Delete Account</strong> in the app. Upon deletion, your account and personal data are removed from our live systems immediately and any residual copies in encrypted backups are purged within 30 days. If you cannot access the app, you may request deletion as described on our <a href="/delete-account">Delete Your Account</a> page. Disconnecting a fitness service (Settings → Connected Services → Unlink) removes only the stored access token; any data already imported remains in your account until account deletion.</p>
+
+    <h2>12. Children's Privacy</h2>
     <p>in/out is not directed to children under 13. We do not knowingly collect personal information from children under 13. If you believe your child has provided us with personal data, please contact us to have it removed.</p>
 
-    <h2>10. Changes to This Policy</h2>
+    <h2>13. Changes to This Policy</h2>
     <p>We may update this Privacy Policy from time to time. We will notify you of any significant changes by updating the "Last updated" date at the top of this page. Continued use of the app after changes constitutes acceptance of the updated policy.</p>
 
-    <h2>11. Contact Us</h2>
+    <h2>14. Contact Us</h2>
     <p>If you have questions about this Privacy Policy, please contact us at: <a href="mailto:inoutsupport@proton.me">inoutsupport@proton.me</a></p>
   </div>
 </body>
