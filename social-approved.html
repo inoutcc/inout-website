@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>in/out — Social Campaigns</title>
+  <meta name="robots" content="noindex" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;900&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --grad: linear-gradient(135deg, #f97316, #ec4899, #a855f7);
+      --bg: #0f0f0f;
+      --card: #1a1a1a;
+      --border: #2a2a2a;
+      --text: #f1f1f1;
+      --muted: #9a9a9a;
+    }
+    body {
+      font-family: 'Inter', system-ui, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 24px;
+    }
+    .card {
+      max-width: 440px;
+      width: 100%;
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 24px;
+      padding: 36px 32px;
+      text-align: center;
+      box-shadow: 0 20px 60px rgba(0,0,0,.4);
+    }
+    .mark {
+      width: 52px; height: 52px; margin: 0 auto 16px;
+      border-radius: 16px; background: var(--grad);
+      display: flex; align-items: center; justify-content: center;
+      font-weight: 900; font-size: 22px; color: #fff;
+    }
+    .eyebrow {
+      font-size: 11px; letter-spacing: .1em; text-transform: uppercase;
+      font-weight: 700; margin-bottom: 14px;
+      background: var(--grad); -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+    }
+    .icon { font-size: 46px; margin-bottom: 10px; }
+    h1 { font-size: 21px; font-weight: 900; margin-bottom: 12px; }
+    p.body-text { font-size: 15px; color: var(--muted); line-height: 1.6; margin-bottom: 8px; }
+    .theme-tag {
+      display: inline-block; margin-top: 10px; font-size: 12px; font-weight: 700;
+      padding: 4px 12px; border-radius: 20px; background: rgba(249,115,22,.12);
+      color: #f97316; border: 1px solid rgba(249,115,22,.3);
+    }
+    .actions { margin-top: 26px; display: flex; gap: 10px; justify-content: center; flex-wrap: wrap; }
+    .btn {
+      display: inline-flex; align-items: center; gap: 8px;
+      font-weight: 700; font-size: 14px; padding: 12px 22px; border-radius: 12px;
+      text-decoration: none; border: none; cursor: pointer; transition: transform .15s, opacity .15s;
+    }
+    .btn:hover { transform: translateY(-2px); }
+    .btn.dry { background: #2a2a2a; color: #fff; }
+    .btn.publish { background: var(--grad); color: #fff; box-shadow: 0 4px 20px rgba(249,115,22,.35); }
+    .btn.reject { background: #3a1a1a; color: #f87171; }
+    .footer-note { margin-top: 22px; font-size: 12px; color: #666; }
+    .spinner {
+      width: 28px; height: 28px; border-radius: 50%;
+      border: 3px solid #2a2a2a; border-top-color: #f97316;
+      margin: 0 auto 14px; animation: spin .8s linear infinite;
+    }
+    @keyframes spin { to { transform: rotate(360deg); } }
+  </style>
+</head>
+<body>
+  <div class="card" id="card">
+    <div class="mark">i/o</div>
+    <div class="eyebrow">in/out · social campaigns</div>
+    <div class="spinner"></div>
+    <p class="body-text">Loading…</p>
+  </div>
+
+  <script>
+    const params = new URLSearchParams(window.location.search);
+    const action = params.get('action') || 'invalid';
+    const theme = params.get('theme') || '';
+    const count = params.get('count') || '0';
+    const group = params.get('group') || '';
+    const id = params.get('id') || '';
+    const token = params.get('token') || '';
+    const message = params.get('message') || '';
+
+    const FN_BASE = 'https://wnjbokrfgyujsxowcmlg.supabase.co/functions/v1'; // Confirmation page lives at https://inoutcc.app/social-approved
+    const card = document.getElementById('card');
+    // social-publish accepts either ?group= or ?id= — mirror whichever social-approve used.
+    const refParam = group ? `group=${encodeURIComponent(group)}` : `id=${encodeURIComponent(id)}`;
+
+    function themeTag() {
+      return theme ? `<div class="theme-tag">${escapeHtml(theme)}</div>` : '';
+    }
+    function escapeHtml(s) {
+      return String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+    }
+    function plural(n) { return n === '1' ? '' : 's'; }
+
+    let html = '';
+
+    if (action === 'approved') {
+      const dryUrl = `${FN_BASE}/social-publish?${refParam}&token=${encodeURIComponent(token)}&dry=1`;
+      const pubUrl = `${FN_BASE}/social-publish?${refParam}&token=${encodeURIComponent(token)}`;
+      html = `
+        <div class="icon">✅</div>
+        <h1>Approved</h1>
+        <p class="body-text">${count} post${plural(count)} marked approved. Publish them now, or run a dry-run first to preview what would post.</p>
+        ${themeTag()}
+        <div class="actions">
+          <a class="btn dry" href="${dryUrl}">🧪 Dry-run</a>
+          <a class="btn publish" href="${pubUrl}">🚀 Publish now</a>
+        </div>
+        <div class="footer-note">Dry-run previews without posting. Publish now goes live immediately.</div>
+      `;
+    } else if (action === 'rejected') {
+      html = `
+        <div class="icon">🚫</div>
+        <h1>Rejected</h1>
+        <p class="body-text">${count} post${plural(count)} won't be posted.</p>
+        ${themeTag()}
+      `;
+    } else if (action === 'already_handled') {
+      html = `
+        <div class="icon">✅</div>
+        <h1>Already handled</h1>
+        <p class="body-text">No draft posts matched this link anymore — this campaign was likely already approved, rejected, or published from an earlier click.</p>
+      `;
+    } else {
+      html = `
+        <div class="icon">⚠️</div>
+        <h1>Invalid or expired link</h1>
+        <p class="body-text">${message ? escapeHtml(message) : 'This link is missing required information or no longer matches a pending post.'}</p>
+      `;
+    }
+
+    card.innerHTML = `
+      <div class="mark">i/o</div>
+      <div class="eyebrow">in/out · social campaigns</div>
+      ${html}
+    `;
+  </script>
+</body>
+</html>
