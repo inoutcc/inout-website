@@ -39,9 +39,9 @@
     }
     .mark {
       width: 52px; height: 52px; margin: 0 auto 16px;
-      border-radius: 16px; background: var(--grad);
-      display: flex; align-items: center; justify-content: center;
-      font-weight: 900; font-size: 22px; color: #fff;
+      border-radius: 16px;
+      display: block;
+      box-shadow: 0 4px 16px rgba(0,0,0,.3);
     }
     .eyebrow {
       font-size: 11px; letter-spacing: .1em; text-transform: uppercase;
@@ -77,7 +77,7 @@
 </head>
 <body>
   <div class="card" id="card">
-    <div class="mark">i/o</div>
+    <img class="mark" src="https://wnjbokrfgyujsxowcmlg.supabase.co/storage/v1/object/public/social-assets/brand/inout-icon-512.png" alt="in/out" />
     <div class="eyebrow">in/out · social campaigns</div>
     <div class="spinner"></div>
     <p class="body-text">Loading…</p>
@@ -144,7 +144,7 @@
     }
 
     card.innerHTML = `
-      <div class="mark">i/o</div>
+      <img class="mark" src="https://wnjbokrfgyujsxowcmlg.supabase.co/storage/v1/object/public/social-assets/brand/inout-icon-512.png" alt="in/out" />
       <div class="eyebrow">in/out · social campaigns</div>
       ${html}
     `;
