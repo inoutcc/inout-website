@@ -84,7 +84,7 @@
     </ul>
 
     <h2>5. Connected Fitness Services</h2>
-    <p>In/out optionally connects to third-party fitness platforms to import health data directly into your dashboard. You must explicitly authorize each connection via that service's secure OAuth login. The following services may be connected:</p>
+    <p>in/out optionally reads supported fitness data through Android Health Connect after you grant permission on your device. Many companion apps can write data to Health Connect, including:</p>
     <ul>
       <li><strong>Fitbit</strong> (<a href="https://www.fitbit.com/legal/privacy-policy">fitbit.com/legal/privacy-policy</a>)</li>
       <li><strong>Strava</strong> (<a href="https://www.strava.com/legal/privacy">strava.com/legal/privacy</a>)</li>
@@ -94,13 +94,13 @@
       <li><strong>Garmin</strong> (<a href="https://www.garmin.com/en-US/privacy/app-privacy/">garmin.com/privacy</a>)</li>
       <li><strong>Samsung Health</strong> (<a href="https://www.samsung.com/us/account/privacy-policy/">samsung.com/privacy</a>)</li>
     </ul>
-    <p>For each connected service, we collect only the data you explicitly authorize and only the minimum scopes required to display information in your dashboard (steps, heart rate, sleep, weight, and activity summaries). Specifically:</p>
+    <p>For Health Connect access, we request only the minimum read-only scopes required to display information in your dashboard: steps, heart rate, weight, and active calories burned. Specifically:</p>
     <ul>
-      <li>Data from Fitbit and other connected services is <strong>not sold</strong> to any third party.</li>
-      <li>Data from Fitbit and other connected services is <strong>not used for advertising</strong> or marketing profiling.</li>
+      <li>Health Connect data is <strong>not sold</strong> to any third party.</li>
+      <li>Health Connect data is <strong>not used for advertising</strong> or marketing profiling.</li>
       <li>Data is stored securely in your personal Supabase account and is never shared with other users or external services.</li>
-      <li>You may revoke access at any time from Settings → Connected Services → Unlink. Revoking access removes your stored token immediately.</li>
-      <li>We comply with each connected platform's API terms of service and developer policies.</li>
+      <li>You may revoke access at any time from Android Settings → Health Connect → App permissions.</li>
+      <li>in/out never writes data to Health Connect.</li>
     </ul>
 
     <h2>6. Social Features &amp; Content Visibility</h2>
@@ -115,13 +115,13 @@
     <p>When you use AI features (voice logging, barcode scanning, AI food analysis, or the AI Coach), the text you provide — such as food descriptions, questions, and the relevant context needed to answer them — is sent to the Anthropic Claude API via our secure backend proxy. We do not send your name, email address, or account identifiers to the AI provider. Under Anthropic's commercial terms, this data is not used to train their models. AI responses are estimates and may not be fully accurate.</p>
 
     <h2>9. Health Data</h2>
-    <p>If you connect a wearable device or grant health permissions, in/out reads step count, heart rate, weight, and active calories burned from Android Health Connect (read-only — in/out never writes to Health Connect), or equivalent data from connected third-party services. This data is used solely within the app to populate your fitness dashboard and calculate your daily calorie balance, and is never sold or shared with advertisers. You can revoke Health Connect access at any time from your device's Health Connect settings, and deleting your in/out account (Section 11) removes any Health Connect data we've stored.</p>
+    <p>If you grant health permissions, in/out reads step count, heart rate, weight, and active calories burned from Android Health Connect (read-only — in/out never writes to Health Connect). This data is used solely within the app to populate your fitness dashboard and calculate your daily calorie balance, and is never sold or shared with advertisers. You can revoke Health Connect access at any time from your device's Health Connect settings, and deleting your in/out account (Section 11) removes any Health Connect data we've stored.</p>
 
     <h2>10. Your Rights &amp; Choices</h2>
     <p>You have the right to access, correct, export, or delete your personal data. You can edit your profile and most data directly in the app, and you can delete your entire account at any time (see Section 11). We do not sell your personal information. To exercise any of these rights, contact us at <a href="mailto:inoutsupport@proton.me">inoutsupport@proton.me</a>.</p>
 
     <h2>11. Data Retention &amp; Deletion</h2>
-    <p>You may delete your account and all associated data at any time from <strong>Settings → Delete Account</strong> in the app. Upon deletion, your account and personal data are removed from our live systems immediately and any residual copies in encrypted backups are purged within 30 days. If you cannot access the app, you may request deletion as described on our <a href="/delete-account">Delete Your Account</a> page. Disconnecting a fitness service (Settings → Connected Services → Unlink) removes only the stored access token; any data already imported remains in your account until account deletion.</p>
+    <p>You may delete your account and all associated data at any time from <strong>Settings → Delete Account</strong> in the app. Upon deletion, your account and personal data are removed from our live systems immediately and any residual copies in encrypted backups are purged within 30 days. If you cannot access the app, you may request deletion as described on our <a href="/delete-account">Delete Your Account</a> page. Revoking Health Connect access stops future health imports; any data already imported remains in your account until account deletion.</p>
 
     <h2>12. Children's Privacy</h2>
     <p>in/out is not directed to children under 13. We do not knowingly collect personal information from children under 13. If you believe your child has provided us with personal data, please contact us to have it removed.</p>
