@@ -1,0 +1,12 @@
+[
+  {
+    "relation": ["delegate_permission/common.handle_all_urls"],
+    "target": {
+      "namespace": "android_app",
+      "package_name": "co.inoutapp.android",
+      "sha256_cert_fingerprints": [
+        "8A:15:47:EA:E4:6D:58:DF:C7:FB:81:25:D2:49:4F:B3:E3:FE:1B:72:1E:40:AD:59:39:80:C7:71:F0:E9:96:8E"
+      ]
+    }
+  }
+]
