@@ -68,8 +68,15 @@
     .actions { display: flex; flex-wrap: wrap; justify-content: center; gap: 12px; }
 
     .stage { position: relative; margin-top: 56px; width: min(980px, 100%); height: clamp(420px, 66vw, 700px); }
-    .phone { position: absolute; border-radius: 12% / 5.6%; padding: 2.6%; background: linear-gradient(160deg, #2a2c33, #0b0c0f); box-shadow: 0 0 0 1px rgba(255,255,255,0.12), 0 40px 100px rgba(0,0,0,0.65); will-change: transform; }
-    .phone img { width: 100%; height: auto; border-radius: 10% / 4.6%; }
+    .phone { position: absolute; will-change: transform; }
+    .phone::before { content: ""; position: absolute; inset: 0 -6px; z-index: 2; pointer-events: none;
+      background:
+        radial-gradient(circle at 50% 15px, #000 0 4.5px, rgba(255,255,255,0.14) 4.5px 5.3px, transparent 5.6px),
+        linear-gradient(#2a2d35, #2a2d35) 0 20% / 4px 6% no-repeat,
+        linear-gradient(#2a2d35, #2a2d35) 0 28% / 4px 9% no-repeat,
+        linear-gradient(#2a2d35, #2a2d35) 100% 24% / 4px 12% no-repeat; }
+    .phone img { display: block; width: 100%; height: auto; border-radius: 9% / 4.67%; background: #0b0c0f;
+      box-shadow: 0 0 0 5px #0b0c0f, 0 0 0 6px rgba(255,255,255,0.16), 0 36px 90px rgba(0,0,0,0.6); }
     .stage .phone { width: 31%; top: 0; left: 50%; }
     .stage .p-mid { z-index: 3; transform: translateX(-50%); }
     .stage .p-left { z-index: 2; width: 27%; transform: translateX(-148%) translateY(7%) rotate(-7deg); }
@@ -159,6 +166,7 @@
     .cta-copy p { color: rgba(255,255,255,0.88); max-width: 440px; margin-bottom: 28px; }
     .cta-copy .focus { margin-top: 26px; font-size: 0.9rem; color: rgba(255,255,255,0.8); }
     .cta-art { align-self: end; display: flex; justify-content: center; padding-top: 50px; height: 100%; }
+    .cta-art .phone img { border-radius: 9% / 4.16%; }
     .cta-art .phone { position: relative; width: min(300px, 78%); margin-bottom: -22%; transform: rotate(4deg); }
 
     footer { margin-top: 110px; padding: 40px 0 60px; border-top: 1px solid var(--line); color: var(--muted); font-size: 0.9rem; }
