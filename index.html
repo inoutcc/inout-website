@@ -178,6 +178,334 @@
 
     .rv { opacity: 0; transform: translateY(36px); transition: opacity .9s cubic-bezier(.2,.8,.2,1), transform .9s cubic-bezier(.2,.8,.2,1); }
     .rv.in { opacity: 1; transform: none; }
+    /* ===== STEPS (personality) ===== */
+    .step { --c1: #fb923c; --c2: #f472b6; padding: 0 28px 30px; isolation: isolate; }
+    .step.s2 { --c1: #22c55e; --c2: #38bdf8; }
+    .step.s3 { --c1: #a855f7; --c2: #f472b6; }
+    .step:hover { border-color: var(--c1); box-shadow: 0 24px 70px -20px var(--c1); }
+    .step .ghost { position: absolute; right: -10px; top: -34px; z-index: -1; font-size: 15rem; font-weight: 900; line-height: 1; letter-spacing: -.06em; color: transparent; -webkit-text-stroke: 2px color-mix(in srgb, var(--c1) 45%, transparent); transition: transform .6s cubic-bezier(.2,.8,.2,1), -webkit-text-stroke-color .3s; pointer-events: none; }
+    .step:hover .ghost { transform: translate(-8px, 6px) rotate(-6deg) scale(1.06); -webkit-text-stroke-color: var(--c1); }
+    .step .viz { position: relative; height: 150px; margin: 0 -28px 22px; display: flex; align-items: center; justify-content: center; gap: 16px; border-bottom: 1px solid var(--line); background: radial-gradient(120% 100% at 50% 0%, color-mix(in srgb, var(--c1) 22%, transparent), transparent 70%); overflow: hidden; }
+    .stepno { display: inline-block; font-size: .72rem; font-weight: 800; letter-spacing: .14em; text-transform: uppercase; padding: 5px 11px; border-radius: 999px; background: linear-gradient(135deg, var(--c1), var(--c2)); color: #12060a; margin-bottom: 14px; transition: transform .3s; }
+    .step:hover .stepno { transform: translateX(6px) rotate(-2deg); }
+    .step h3 { font-size: 1.6rem; letter-spacing: -.03em; }
+    .bubble { padding: 9px 14px; border-radius: 16px 16px 16px 4px; background: var(--surface-2); border: 1px solid var(--line); font-weight: 700; font-size: .88rem; white-space: nowrap; transform: translateY(8px) scale(.9); opacity: 0; transition: transform .5s cubic-bezier(.2,.9,.3,1.4) .35s, opacity .4s .35s; }
+    .step.in .bubble { transform: none; opacity: 1; }
+    .mini-wave { display: flex; align-items: center; gap: 3px; height: 54px; }
+    .mini-wave i { width: 4px; height: 100%; border-radius: 4px; background: linear-gradient(var(--c1), var(--c2)); transform: scaleY(calc(.2 + var(--k, 5) * .1)); transition: transform .4s; }
+    .mini-wave i:nth-child(3n) { --k: 3; } .mini-wave i:nth-child(4n) { --k: 8; } .mini-wave i:nth-child(5n+1) { --k: 6; } .mini-wave i:nth-child(7n) { --k: 2; }
+    .step.s1:hover .mini-wave i { animation: eq .7s ease-in-out infinite alternate; animation-delay: calc(var(--n, 0) * -60ms); --h: .95; }
+    .mini-wave i:nth-child(2){--n:1}.mini-wave i:nth-child(3){--n:2}.mini-wave i:nth-child(4){--n:3}.mini-wave i:nth-child(5){--n:4}.mini-wave i:nth-child(6){--n:5}.mini-wave i:nth-child(7){--n:6}.mini-wave i:nth-child(8){--n:7}.mini-wave i:nth-child(9){--n:8}.mini-wave i:nth-child(10){--n:9}.mini-wave i:nth-child(11){--n:10}.mini-wave i:nth-child(12){--n:11}
+    .mini-ring { width: 104px; height: 104px; transform: rotate(-90deg); }
+    .mini-ring circle { fill: none; stroke-width: 7; stroke-linecap: round; }
+    .mini-ring .trk { stroke: rgba(255,255,255,.1); }
+    .mini-ring .arc { stroke: var(--c1); stroke-dasharray: 100; stroke-dashoffset: 100; transition: stroke-dashoffset 1.4s cubic-bezier(.2,.8,.2,1) .3s; }
+    .step.in .mini-ring .arc { stroke-dashoffset: 28; }
+    .step.s2:hover .mini-ring .arc { stroke-dashoffset: 12; transition-delay: 0s; }
+    .mini-ring text { transform: rotate(90deg); transform-origin: 40px 40px; fill: #fff; font: 800 15px "Roboto Flex", sans-serif; letter-spacing: -.02em; stroke: none; }
+    .bars { display: grid; gap: 9px; width: 96px; }
+    .bars span { display: flex; align-items: center; gap: 7px; }
+    .bars em { font-style: normal; font-size: .7rem; font-weight: 800; color: var(--muted); width: 10px; }
+    .bars u { flex: 1; height: 7px; border-radius: 7px; background: rgba(255,255,255,.1); position: relative; overflow: hidden; }
+    .bars u::after { content: ""; position: absolute; inset: 0; width: var(--w); border-radius: 7px; background: linear-gradient(90deg, var(--c1), var(--c2)); transform: scaleX(0); transform-origin: 0 50%; transition: transform 1.1s cubic-bezier(.2,.8,.2,1) .5s; }
+    .step.in .bars u::after { transform: scaleX(1); }
+    .step.s2:hover .bars u::after { transform: scaleX(1.25); transition-delay: 0s; }
+    .lvl { display: flex; align-items: center; gap: 10px; width: 74%; }
+    .lvl b { font-size: .8rem; font-weight: 800; letter-spacing: .06em; }
+    .xp { flex: 1; height: 12px; border-radius: 12px; background: rgba(255,255,255,.1); overflow: hidden; }
+    .xp u { display: block; height: 100%; width: 100%; border-radius: 12px; background: linear-gradient(90deg, var(--c1), var(--c2)); transform: scaleX(0); transform-origin: 0 50%; transition: transform 1.3s cubic-bezier(.2,.8,.2,1) .4s; }
+    .step.in .xp u { transform: scaleX(.64); }
+    .step.s3:hover .xp u { transform: scaleX(1); transition-delay: 0s; }
+    .pop { position: absolute; right: 22%; top: 24px; font-weight: 800; font-size: .9rem; color: #fff; padding: 4px 10px; border-radius: 999px; background: linear-gradient(135deg, var(--c1), var(--c2)); opacity: 0; transform: translateY(14px) scale(.8); transition: opacity .3s, transform .5s cubic-bezier(.2,.9,.3,1.5); }
+    .step.s3:hover .pop { opacity: 1; transform: translateY(-4px) scale(1); }
+    .flame { position: absolute; left: 12%; bottom: 20px; font-size: 1.5rem; transition: transform .4s cubic-bezier(.2,.9,.3,1.5); }
+    .step.s3:hover .flame { transform: scale(1.5) rotate(-12deg); }
+    @media (max-width: 900px) { .step .ghost { font-size: 11rem; } }
+
+    /* uniform phone sizes: screenshots have mixed aspect ratios (1.93 vs 2.16) */
+    .stage .phone img { aspect-ratio: 760 / 1465; object-fit: cover; object-position: 50% 0; }
+    .viewer { --vw: min(340px, 78vw); display: flex; justify-content: center; width: var(--vw); }
+    .viewer .phone { width: auto; height: calc(var(--vw) * 1.928); }
+    .viewer .phone img { height: 100%; width: auto; max-width: none; }
+    .theme-pair .phone img { aspect-ratio: 760 / 1465; object-fit: cover; object-position: 50% 0; }
+
+    /* ===== MORE PERSONALITY: features / pricing / theme / faq ===== */
+    .fcard { --c1: #fb923c; --c2: #f472b6; padding: 0 26px 26px; gap: 8px; isolation: isolate; }
+    .fcard:hover { border-color: var(--c1); box-shadow: 0 22px 60px -22px var(--c1); }
+    .fcard .ghost { position: absolute; right: -4px; top: 52px; z-index: -1; font-size: 7rem; line-height: 1; opacity: .09; filter: grayscale(1); transition: transform .6s cubic-bezier(.2,.8,.2,1), opacity .3s, filter .3s; pointer-events: none; }
+    .fcard:hover .ghost { transform: translate(-10px, -6px) rotate(-10deg) scale(1.2); opacity: .22; filter: none; }
+    .fcard .fviz { position: relative; height: 112px; margin: 0 -26px 14px; display: flex; align-items: center; justify-content: center; gap: 14px; border-bottom: 1px solid var(--line); overflow: hidden; background: radial-gradient(120% 100% at 50% 0%, color-mix(in srgb, var(--c1) 22%, transparent), transparent 72%); }
+    .fcard .tag { color: var(--c1); border-color: color-mix(in srgb, var(--c1) 45%, transparent); background: color-mix(in srgb, var(--c1) 10%, transparent); order: 0; }
+    .fcard:hover .tag { background: color-mix(in srgb, var(--c1) 24%, transparent); }
+    .fcard h3 { font-size: 1.3rem; letter-spacing: -.025em; }
+    .fcard p { flex: initial; }
+    .fcard .mini-wave { height: 46px; }
+    .fcard:hover .mini-wave i { animation: eq .7s ease-in-out infinite alternate; animation-delay: calc(var(--n, 0) * -60ms); --h: .95; }
+    /* generic in-view fills */
+    .fcard.in .bars u::after { transform: scaleX(1); }
+    .fcard:hover .bars u::after { transform: scaleX(1.2); transition-delay: 0s; }
+    .bars.wide { width: 62%; }
+    .fcard.in .xp u { transform: scaleX(.64); }
+    .fcard:hover .xp u { transform: scaleX(1); transition-delay: 0s; }
+    .fcard .lvl { width: 70%; }
+    .fcard .pop { right: 14%; top: 16px; }
+    .fcard:hover .pop { opacity: 1; transform: translateY(-4px) scale(1); }
+    /* barcode */
+    .bc { position: relative; display: flex; align-items: center; gap: 3px; height: 58px; padding: 0 14px; border-radius: 10px; background: rgba(255,255,255,.06); }
+    .bc i { width: var(--w); height: 100%; background: #e8edf5; border-radius: 1px; }
+    .bc .scan { position: absolute; left: 6px; right: 6px; top: 6px; height: 2px; background: var(--c1); box-shadow: 0 0 14px 3px var(--c1); border-radius: 2px; }
+    .f-scan:hover .scan { animation: scanY 1.1s ease-in-out infinite alternate; }
+    @keyframes scanY { to { transform: translateY(44px); } }
+    .f-scan:hover .bc { background: color-mix(in srgb, var(--c1) 14%, transparent); }
+    /* sleep + mood */
+    .moods { display: flex; gap: 10px; }
+    .moods span { font-size: 1.7rem; transition: transform .35s cubic-bezier(.2,.9,.3,1.6); }
+    .moods span:nth-child(2) { transition-delay: .04s; } .moods span:nth-child(3) { transition-delay: .08s; } .moods span:nth-child(4) { transition-delay: .12s; }
+    .f-sleep:hover .moods span { transform: translateY(-9px) rotate(-8deg) scale(1.15); }
+    .moon { position: absolute; right: 18px; top: 10px; font-size: 1.2rem; opacity: .55; transition: transform .6s, opacity .3s; }
+    .f-sleep:hover .moon { transform: rotate(-25deg) scale(1.4); opacity: 1; }
+    /* steps */
+    .stepcount { text-align: center; line-height: 1; }
+    .stepcount b { display: block; font-size: 2.7rem; font-weight: 800; letter-spacing: -.04em; font-variant-numeric: tabular-nums; background: linear-gradient(135deg, var(--c1), var(--c2)); -webkit-background-clip: text; background-clip: text; color: transparent; transition: transform .4s cubic-bezier(.2,.9,.3,1.5); }
+    .stepcount small { display: block; margin-top: 6px; font-size: .72rem; font-weight: 700; letter-spacing: .12em; text-transform: uppercase; color: var(--muted); }
+    .f-steps:hover .stepcount b { transform: scale(1.12); }
+    /* chart */
+    .chart { display: flex; align-items: flex-end; gap: 9px; height: 70px; }
+    .chart i { width: 16px; height: var(--h); border-radius: 6px 6px 3px 3px; background: linear-gradient(var(--c1), var(--c2)); transform: scaleY(0); transform-origin: 50% 100%; transition: transform .7s cubic-bezier(.2,.9,.3,1.3) calc(var(--n) * 70ms + .3s); opacity: .85; }
+    .fcard.in .chart i { transform: scaleY(1); }
+    .f-trend:hover .chart i { transform: scaleY(1.22); transition-delay: calc(var(--n) * 35ms); opacity: 1; }
+    /* social */
+    .avs { display: flex; }
+    .avs span { width: 42px; height: 42px; margin-left: -10px; border-radius: 50%; display: grid; place-items: center; font-size: 1.3rem; background: var(--surface-2); border: 2px solid #0e0f13; box-shadow: 0 0 0 1px var(--line); transition: transform .35s cubic-bezier(.2,.9,.3,1.5); }
+    .avs span:first-child { margin-left: 0; }
+    .f-social:hover .avs span { transform: translateY(-6px); }
+    .f-social:hover .avs span:nth-child(2) { transition-delay: .05s; } .f-social:hover .avs span:nth-child(3) { transition-delay: .1s; } .f-social:hover .avs span:nth-child(4) { transition-delay: .15s; }
+    .cb { padding: 8px 12px; border-radius: 14px 14px 14px 4px; background: linear-gradient(135deg, var(--c1), var(--c2)); color: #1a0a10; font-weight: 800; font-size: .8rem; white-space: nowrap; transform: scale(.85); opacity: .75; transition: transform .4s cubic-bezier(.2,.9,.3,1.5), opacity .3s; }
+    .f-social:hover .cb { transform: scale(1.08) rotate(-3deg); opacity: 1; }
+    /* streak */
+    .days { display: flex; gap: 8px; }
+    .days i { width: 22px; height: 22px; border-radius: 50%; border: 2px solid rgba(255,255,255,.18); background: transparent; transition: background .35s calc(var(--n) * 90ms + .3s), border-color .35s calc(var(--n) * 90ms + .3s), transform .35s calc(var(--n) * 90ms + .3s); }
+    .fcard.in .days i { background: linear-gradient(135deg, var(--c1), var(--c2)); border-color: transparent; }
+    .fcard.in .days i:last-child { background: transparent; border-color: var(--c2); border-style: dashed; }
+    .f-streak:hover .days i { transform: translateY(-5px) scale(1.15); transition-delay: calc(var(--n) * 40ms); }
+    .flame2 { position: absolute; right: 22px; bottom: 14px; font-size: 1.6rem; transition: transform .4s cubic-bezier(.2,.9,.3,1.5); }
+    .f-streak:hover .flame2 { transform: scale(1.5) rotate(-12deg); }
+    /* leagues */
+    .ranks { display: flex; align-items: flex-end; gap: 8px; flex-wrap: wrap; justify-content: center; padding: 0 14px; }
+    .ranks span { font-size: .78rem; font-weight: 800; padding: 6px 12px; border-radius: 999px; border: 1px solid var(--line); background: var(--surface-2); transform: translateY(calc(var(--r) * -7px)); transition: transform .4s cubic-bezier(.2,.9,.3,1.4) calc(var(--r) * 50ms), background .3s, color .3s; }
+    .ranks span:nth-child(1) { color: #d69a6b; } .ranks span:nth-child(2) { color: #cbd5e1; } .ranks span:nth-child(3) { color: #facc15; } .ranks span:nth-child(4) { color: #67e8f9; } .ranks span:nth-child(5) { color: #c4b5fd; }
+    .f-league:hover .ranks span { transform: translateY(calc(var(--r) * -16px)); background: color-mix(in srgb, currentColor 14%, var(--surface-2)); }
+    .f-league .fviz { height: 130px; }
+
+    /* pricing */
+    .plan { --c1: #22c55e; --c2: #38bdf8; }
+    .plan.p-pro { --c1: #f472b6; --c2: #fb923c; }
+    .plan.p-ai { --c1: #a855f7; --c2: #38bdf8; }
+    .plan { padding: 0 28px 32px; overflow: hidden; }
+    .plan:hover { border-color: var(--c1); box-shadow: 0 26px 70px -24px var(--c1); }
+    .pviz { position: relative; height: 130px; margin: 0 -28px 22px; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 8px; border-bottom: 1px solid var(--line); background: radial-gradient(120% 100% at 50% 0%, color-mix(in srgb, var(--c1) 24%, transparent), transparent 72%); }
+    .pviz small { font-size: .7rem; font-weight: 800; letter-spacing: .14em; text-transform: uppercase; color: var(--muted); }
+    .dots { display: flex; gap: 9px; }
+    .dots i { width: 18px; height: 18px; border-radius: 50%; border: 2px solid rgba(255,255,255,.2); transition: background .3s calc(var(--n) * 110ms + .3s), border-color .3s calc(var(--n) * 110ms + .3s), transform .3s calc(var(--n) * 110ms + .3s); }
+    .plan.in .dots i { background: linear-gradient(135deg, var(--c1), var(--c2)); border-color: transparent; }
+    .p-free:hover .dots i { transform: translateY(-5px) scale(1.2); transition-delay: calc(var(--n) * 45ms); }
+    .inf { font-size: 3.6rem; font-weight: 800; line-height: 1; background: linear-gradient(135deg, var(--c1), var(--c2)); -webkit-background-clip: text; background-clip: text; color: transparent; transition: transform .6s cubic-bezier(.2,.9,.3,1.4); }
+    .p-pro:hover .inf { transform: scale(1.25) rotate(-8deg); }
+    .plan .mini-wave { height: 44px; }
+    .p-ai:hover .mini-wave i { animation: eq .7s ease-in-out infinite alternate; animation-delay: calc(var(--n, 0) * -60ms); --h: .95; }
+    .plan .badge { top: 14px; right: 14px; z-index: 2; }
+    .plan li::before { border-color: var(--c1); }
+    .plan .btn { transition: transform .2s, box-shadow .2s, background .2s; }
+    .plan:hover .btn-ghost { background: linear-gradient(135deg, var(--c1), var(--c2)); color: #0b0b10; border-color: transparent; }
+
+    /* faq */
+    .faq { counter-reset: q; }
+    .faq details { counter-increment: q; position: relative; overflow: hidden; transition: border-color .25s, transform .25s, background .25s; }
+    .faq details:hover { transform: translateX(6px); border-color: rgba(255,255,255,.22); }
+    .faq details::before { content: ""; position: absolute; left: 0; top: 0; bottom: 0; width: 4px; background: var(--grad); transform: scaleY(0); transition: transform .3s; transform-origin: 50% 0; }
+    .faq details[open]::before { transform: scaleY(1); }
+    .faq details[open] { background: linear-gradient(90deg, rgba(251,146,60,.07), var(--surface) 40%); }
+    .faq summary { justify-content: flex-start; gap: 14px; }
+    .faq summary::before { content: counter(q, decimal-leading-zero); font-size: .78rem; font-weight: 800; letter-spacing: .08em; color: var(--orange); padding: 4px 9px; border-radius: 999px; background: rgba(251,146,60,.1); border: 1px solid rgba(251,146,60,.3); }
+    .faq summary::after { margin-left: auto; width: 34px; height: 34px; display: grid; place-items: center; border-radius: 50%; background: rgba(255,255,255,.06); flex: none; transition: transform .3s, background .3s; }
+    .faq details:hover summary::after { background: rgba(251,146,60,.2); }
+
+    /* day / night compare */
+    .compare { display: flex; flex-direction: column; align-items: center; gap: 28px; }
+    .cmp-phone { position: relative; width: min(320px, 72vw); touch-action: pan-y; cursor: ew-resize; }
+    .cmp-phone img { aspect-ratio: 760 / 1465; object-fit: cover; object-position: 50% 0; }
+    .cmp-phone img.dark { position: absolute; inset: 0; clip-path: inset(0 0 0 var(--x)); }
+    .cmp-line { position: absolute; top: 0; bottom: 0; left: var(--x); width: 3px; margin-left: -1.5px; background: #fff; box-shadow: 0 0 24px rgba(255,255,255,.7); z-index: 3; pointer-events: none; }
+    .cmp-line b { position: absolute; top: 50%; left: 50%; width: 44px; height: 44px; margin: -22px; display: grid; place-items: center; border-radius: 50%; background: #fff; color: #09090b; font-size: 1.1rem; box-shadow: 0 6px 24px rgba(0,0,0,.5); }
+    .cmp-ctl { display: flex; align-items: center; gap: 14px; width: min(460px, 90%); font-weight: 700; font-size: .9rem; color: var(--muted); }
+    .cmp-ctl input { flex: 1; appearance: none; -webkit-appearance: none; height: 8px; border-radius: 8px; background: linear-gradient(90deg, #fde68a, #fb923c 40%, #7c3aed 60%, #1e1b4b); outline: none; }
+    .cmp-ctl input::-webkit-slider-thumb { -webkit-appearance: none; width: 26px; height: 26px; border-radius: 50%; background: #fff; border: 0; box-shadow: 0 4px 14px rgba(0,0,0,.5); cursor: grab; transition: transform .2s; }
+    .cmp-ctl input::-webkit-slider-thumb:hover { transform: scale(1.2); }
+    .cmp-ctl input::-moz-range-thumb { width: 26px; height: 26px; border-radius: 50%; background: #fff; border: 0; }
+
+    /* ===== FEATURE TICKER (carousel) ===== */
+    .ticker { padding: 26px 0 22px; border-block: 1px solid var(--line); background: linear-gradient(180deg, rgba(255,255,255,.02), transparent); }
+    .tk-row { display: flex; align-items: center; gap: 10px; max-width: 1280px; margin: 0 auto; padding: 0 12px; }
+    .tk-viewport { position: relative; flex: 1; overflow: hidden; cursor: grab; touch-action: pan-y; user-select: none; -webkit-user-select: none; outline: none;
+      -webkit-mask-image: linear-gradient(90deg, transparent, #000 9%, #000 91%, transparent); mask-image: linear-gradient(90deg, transparent, #000 9%, #000 91%, transparent); }
+    .tk-viewport.drag { cursor: grabbing; }
+    .tk-viewport:focus-visible { box-shadow: 0 0 0 2px var(--orange); border-radius: 18px; }
+    .tk-track { display: flex; gap: 12px; width: max-content; padding: 8px 0 10px; will-change: transform; }
+    .tk-pill { --c: #fb923c; flex: none; display: inline-flex; align-items: center; gap: 10px; padding: 9px 20px 9px 9px; border-radius: 999px; border: 1px solid var(--line); background: var(--surface); color: #d6d9e2; font: inherit; font-weight: 700; font-size: .95rem; white-space: nowrap; cursor: pointer; transition: transform .25s cubic-bezier(.2,.9,.3,1.4), border-color .25s, background .25s, box-shadow .25s, color .25s; }
+    .tk-pill .ic { width: 34px; height: 34px; border-radius: 50%; display: grid; place-items: center; font-size: 1.05rem; background: color-mix(in srgb, var(--c) 18%, transparent); transition: transform .35s cubic-bezier(.2,.9,.3,1.6), background .25s; }
+    .tk-pill:hover { transform: translateY(-4px); border-color: var(--c); color: #fff; box-shadow: 0 14px 34px -14px var(--c); }
+    .tk-pill:hover .ic { transform: scale(1.18) rotate(-10deg); }
+    .tk-pill:active { transform: translateY(-1px) scale(.97); }
+    .tk-pill.on { color: #fff; border-color: var(--c); background: linear-gradient(135deg, color-mix(in srgb, var(--c) 26%, var(--surface)), var(--surface)); box-shadow: 0 14px 40px -14px var(--c); }
+    .tk-pill.on .ic { background: var(--c); }
+    .tk-pill:focus-visible { outline: 2px solid var(--c); outline-offset: 3px; }
+    .tk-btn { flex: none; width: 46px; height: 46px; border-radius: 50%; border: 1px solid var(--line); background: var(--surface-2); color: #fff; font-size: 1.15rem; font-weight: 800; cursor: pointer; display: grid; place-items: center; transition: transform .2s cubic-bezier(.2,.9,.3,1.5), background .2s, border-color .2s; }
+    .tk-btn:hover { background: var(--grad); color: #1a0a05; border-color: transparent; transform: scale(1.12); }
+    .tk-btn[data-dir="-1"]:hover { transform: scale(1.12) translateX(-3px); } .tk-btn[data-dir="1"]:hover { transform: scale(1.12) translateX(3px); }
+    .tk-btn:active { transform: scale(.92); }
+    .tk-detail { --c: #fb923c; display: flex; align-items: center; gap: 16px; width: min(720px, calc(100% - 32px)); margin: 14px auto 0; padding: 14px 18px; border-radius: 22px; border: 1px solid color-mix(in srgb, var(--c) 45%, transparent); background: linear-gradient(90deg, color-mix(in srgb, var(--c) 14%, var(--surface)), var(--surface) 70%); transition: border-color .35s, background .35s; }
+    .tk-ic { flex: none; width: 48px; height: 48px; border-radius: 16px; display: grid; place-items: center; font-size: 1.5rem; background: var(--c); box-shadow: 0 8px 24px -8px var(--c); transition: background .35s; }
+    .tk-txt { flex: 1; min-width: 0; transition: opacity .2s, transform .25s; }
+    .tk-txt.swap { opacity: 0; transform: translateY(6px); }
+    .tk-txt b { display: block; font-size: 1.05rem; font-weight: 800; letter-spacing: -.01em; }
+    .tk-txt p { color: var(--muted); font-size: .92rem; line-height: 1.4; }
+    .tk-go { flex: none; font-weight: 800; font-size: .88rem; padding: 9px 16px; border-radius: 999px; background: rgba(255,255,255,.08); transition: background .2s, color .2s, transform .2s; }
+    .tk-go:hover { background: var(--c); color: #12060a; transform: translateX(3px); }
+    .tk-hint { text-align: center; margin-top: 10px; font-size: .72rem; font-weight: 700; letter-spacing: .14em; text-transform: uppercase; color: #5d6370; }
+    @media (max-width: 600px) { .tk-btn { width: 38px; height: 38px; } .tk-go { display: none; } .tk-row { padding: 0 6px; gap: 4px; } }
+
+    /* ===== VOICE HIGHLIGHT ===== */
+    .voice-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 64px; align-items: center; position: relative; }
+    .voice-grid::before { content: ""; position: absolute; right: -10%; top: 50%; width: 560px; height: 560px; margin-top: -280px; border-radius: 50%; background: radial-gradient(circle, rgba(244,114,182,.25), rgba(251,146,60,.1) 50%, transparent 70%); filter: blur(30px); pointer-events: none; z-index: -1; }
+    .vh { font-size: clamp(2.6rem, 6.4vw, 5.4rem); }
+    .vh em { font-style: normal; background: var(--grad); -webkit-background-clip: text; background-clip: text; color: transparent; }
+    .vpoints { list-style: none; margin: 26px 0 30px; display: grid; gap: 12px; color: var(--muted); }
+    .vpoints li { padding-left: 22px; position: relative; }
+    .vpoints li::before { content: ""; position: absolute; left: 0; top: .6em; width: 8px; height: 8px; border-radius: 50%; background: var(--grad); }
+    .vpoints b { color: var(--text); }
+    .vscreen { position: relative; border: 1px solid var(--line); border-radius: 36px; padding: 30px 26px 24px; background: linear-gradient(180deg, #16171d, #0e0f13); box-shadow: 0 40px 100px rgba(0,0,0,.55), 0 0 90px rgba(244,114,182,.12); min-height: 520px; display: flex; flex-direction: column; align-items: center; text-align: center; }
+    .vstat { font-size: .8rem; font-weight: 800; letter-spacing: .1em; text-transform: uppercase; color: var(--muted); margin-bottom: 22px; transition: color .3s; }
+    .vdemo.listening .vstat { color: var(--pink); }
+    .vdemo.done .vstat { color: var(--green); }
+    .mic { position: relative; width: 84px; height: 84px; border-radius: 50%; border: 0; cursor: pointer; background: var(--grad); display: grid; place-items: center; box-shadow: 0 10px 40px rgba(244,114,182,.45); transition: transform .2s; }
+    .mic:hover { transform: scale(1.06); } .mic:active { transform: scale(.95); }
+    .mic .ring { position: absolute; inset: 0; border-radius: 50%; border: 2px solid rgba(244,114,182,.7); opacity: 0; pointer-events: none; }
+    .vdemo.listening .ring { animation: ripple 2s ease-out infinite; }
+    .vdemo.listening .r2 { animation-delay: .6s; } .vdemo.listening .r3 { animation-delay: 1.2s; }
+    @keyframes ripple { 0% { transform: scale(1); opacity: .8; } 100% { transform: scale(2.3); opacity: 0; } }
+    .wave { display: flex; align-items: center; justify-content: center; gap: 4px; height: 56px; margin: 20px 0 6px; }
+    .wave i { width: 4px; height: 100%; border-radius: 4px; background: var(--grad); transform: scaleY(.08); transform-origin: 50% 50%; opacity: .45; transition: transform .4s, opacity .4s; }
+    .vdemo.listening .wave i { opacity: 1; animation: eq .9s ease-in-out infinite alternate; animation-delay: calc(var(--i) * -70ms); }
+    @keyframes eq { 0% { transform: scaleY(.1); } 100% { transform: scaleY(var(--h)); } }
+    .tx { min-height: 3.2em; font-size: 1.2rem; font-weight: 700; letter-spacing: -.01em; max-width: 30ch; }
+    .vdemo.listening .tx::after { content: ""; display: inline-block; width: 2px; height: 1em; margin-left: 3px; vertical-align: -.12em; background: var(--orange); animation: blink 1s steps(2) infinite; }
+    .vlist { list-style: none; width: 100%; display: grid; gap: 8px; margin: 14px 0; min-height: 150px; align-content: start; }
+    .vlist li { display: flex; align-items: center; gap: 12px; padding: 12px 16px; border: 1px solid var(--line); border-radius: 18px; background: var(--surface-2); text-align: left; opacity: 0; transform: translateY(14px) scale(.96); transition: opacity .4s, transform .5s cubic-bezier(.2,.9,.3,1.3); }
+    .vlist li.in { opacity: 1; transform: none; }
+    .vlist .e { font-size: 1.4rem; } .vlist .n { flex: 1; font-weight: 600; }
+    .vlist .k { color: var(--muted); font-size: .9rem; } .vlist .k b { color: var(--text); font-size: 1.05rem; }
+    .vtotal { margin-top: auto; width: 100%; display: flex; justify-content: space-between; align-items: baseline; padding-top: 16px; border-top: 1px solid var(--line); font-weight: 700; color: var(--muted); }
+    .vtotal b { font-size: 2rem; letter-spacing: -.03em; color: var(--text); font-variant-numeric: tabular-nums; }
+    .vdemo.done .vtotal b { background: var(--grad); -webkit-background-clip: text; background-clip: text; color: transparent; animation: pop .5s; }
+    @keyframes pop { 40% { transform: scale(1.18); } }
+    @media (max-width: 900px) { .voice-grid { grid-template-columns: 1fr; gap: 40px; } .vscreen { min-height: 480px; } }
+
+    /* ===== INTERACTIVE / ANIMATED LAYER ===== */
+    .progress { position: fixed; top: 0; left: 0; height: 3px; width: 100%; z-index: 80; background: var(--grad); transform-origin: 0 50%; transform: scaleX(var(--p, 0)); pointer-events: none; }
+    .cursor-glow { position: fixed; left: 0; top: 0; width: 460px; height: 460px; margin: -230px 0 0 -230px; border-radius: 50%; z-index: 1; pointer-events: none; opacity: 0; transition: opacity .4s; mix-blend-mode: screen;
+      background: radial-gradient(circle, rgba(244,114,182,0.16), rgba(251,146,60,0.07) 45%, transparent 70%); will-change: transform; }
+    .cursor-glow.on { opacity: 1; }
+    main, .cta, footer, .theme, .marquee { position: relative; z-index: 2; }
+
+    .nav { transition: background .3s, box-shadow .3s, top .3s; }
+    .nav.scrolled { background: rgba(14,15,19,0.85); box-shadow: 0 10px 40px rgba(0,0,0,0.45); top: 10px; }
+    .nav-links a.active { color: #fff; background: rgba(255,255,255,0.10); }
+
+    /* rotating hero word */
+    h1 em { display: inline-block; position: relative; }
+    h1 em .w { display: inline-block; transition: opacity .35s, transform .35s, filter .35s; }
+    h1 em .w.out { opacity: 0; transform: translateY(-.3em); filter: blur(8px); }
+    h1 em .w.pre { opacity: 0; transform: translateY(.3em); filter: blur(8px); transition: none; }
+    h1 .caret { display: inline-block; width: .06em; height: .8em; margin-left: .04em; background: var(--orange); vertical-align: -0.04em; animation: blink 1s steps(2) infinite; border-radius: 2px; }
+    @keyframes blink { 50% { opacity: 0; } }
+
+    /* hero phones: still until hovered */
+    .stage .phone { transition: translate .45s cubic-bezier(.2,.8,.2,1), scale .45s cubic-bezier(.2,.8,.2,1); }
+    .stage .phone img { transition: box-shadow .45s; }
+    .stage .phone:hover { z-index: 6; translate: 0 -16px; scale: 1.04; }
+    .stage .phone:hover img { box-shadow: 0 0 0 5px #0b0c0f, 0 0 0 6px rgba(244,114,182,.6), 0 50px 110px rgba(244,114,182,.28); }
+    .aurora i { translate: calc(var(--sx, 0) * 1px) calc(var(--sy, 0) * 1px); }
+
+    /* hero floating chips */
+    .chip { position: absolute; z-index: 5; display: inline-flex; align-items: center; gap: 8px; padding: 9px 14px; border-radius: 999px; border: 1px solid var(--line); background: rgba(14,15,19,0.72); backdrop-filter: blur(14px); -webkit-backdrop-filter: blur(14px); font-size: .84rem; font-weight: 700; box-shadow: 0 14px 40px rgba(0,0,0,.45); opacity: 0; animation: chipIn .7s cubic-bezier(.2,.8,.2,1) forwards; transition: transform .3s, border-color .3s; }
+    .chip b { font-weight: 800; background: var(--grad); -webkit-background-clip: text; background-clip: text; color: transparent; }
+    .chip:hover { transform: translateY(-4px) scale(1.06); border-color: rgba(251,146,60,.7); }
+    .chip.c1 { left: 2%; top: 22%; animation-delay: 1.1s; }
+    .chip.c2 { right: 1%; top: 12%; animation-delay: 1.35s; }
+    .chip.c3 { right: 6%; bottom: 26%; animation-delay: 1.6s; }
+    @keyframes chipIn { from { opacity: 0; transform: translateY(18px) scale(.9); } to { opacity: 1; } }
+    @media (max-width: 760px) { .chip { display: none; } }
+
+    /* spotlight borders on cards */
+    .step, .fcard, .plan, .tab, .faq details { --sx: 50%; --sy: 50%; }
+    .step::before, .fcard::before, .plan::before { content: ""; position: absolute; inset: 0; border-radius: inherit; pointer-events: none; opacity: 0; transition: opacity .3s;
+      background: radial-gradient(360px circle at var(--sx) var(--sy), rgba(251,146,60,0.16), transparent 60%); }
+    .step:hover::before, .fcard:hover::before, .plan:hover::before { opacity: 1; }
+    .fcard { position: relative; overflow: hidden; }
+    .step { transition: transform .35s cubic-bezier(.2,.8,.2,1), border-color .3s; }
+    .step:hover { transform: translateY(-6px); border-color: rgba(255,255,255,0.22); }
+    .step .n { transition: transform .4s cubic-bezier(.2,.8,.2,1); transform-origin: 0 100%; }
+    .step:hover .n { transform: scale(1.12) rotate(-3deg); }
+    .plan { transition: transform .35s cubic-bezier(.2,.8,.2,1), border-color .3s; }
+    .plan:hover { transform: translateY(-8px); border-color: rgba(255,255,255,0.22); }
+    .plan.hot:hover { border-color: rgba(244,114,182,0.85); }
+    .fcard .tag { transition: transform .3s, background .3s; }
+    .fcard:hover .tag { transform: translateX(4px); background: rgba(251,146,60,0.2); }
+
+    /* staggered reveals */
+    .steps .rv:nth-child(2), .features .rv:nth-child(3n+2), .pricing .rv:nth-child(2) { transition-delay: .09s; }
+    .steps .rv:nth-child(3), .features .rv:nth-child(3n), .pricing .rv:nth-child(3) { transition-delay: .18s; }
+
+    /* tab progress + phone swap */
+    .tab { position: relative; overflow: hidden; }
+    .tab::after { content: ""; position: absolute; left: 0; bottom: 0; height: 3px; width: 100%; background: var(--grad); transform: scaleX(0); transform-origin: 0 50%; }
+    .tab[aria-selected="true"].auto::after { animation: tabfill var(--dur, 5s) linear forwards; }
+    @keyframes tabfill { to { transform: scaleX(1); } }
+    .tab:active { transform: scale(.985); }
+    .viewer .phone { transition: transform .25s ease-out; transform-style: preserve-3d; will-change: transform; }
+    .viewer .phone img { transition: opacity .3s, transform .3s; }
+    .viewer .phone img.swap { opacity: 0; transform: translateX(18px) scale(.97); }
+
+    /* theme phones straighten on scroll */
+    .theme-pair .phone:first-child { transform: rotate(calc(-5deg * var(--t, 1))) translateY(calc(10px * var(--t, 1))); }
+    .theme-pair .phone:last-child { transform: rotate(calc(5deg * var(--t, 1))) translateY(calc(40px * var(--t, 1))); }
+
+    /* misc */
+    .marquee:hover .track { animation-play-state: paused; }
+    .track span { transition: background .2s, border-color .2s, transform .2s; }
+    .track span:hover { background: var(--surface-2); border-color: rgba(251,146,60,.6); transform: translateY(-2px); }
+    .btn { position: relative; will-change: transform; }
+    .btn-grad, .btn-primary { overflow: hidden; }
+    .btn-grad::after, .btn-primary::after { content: ""; position: absolute; top: 0; left: -80%; width: 50%; height: 100%; background: linear-gradient(100deg, transparent, rgba(255,255,255,.55), transparent); transform: skewX(-20deg); }
+    .btn-grad:hover::after, .btn-primary:hover::after { animation: shine .7s ease; }
+    @keyframes shine { to { left: 140%; } }
+    .faq details > p { animation: faqIn .35s ease; }
+    @keyframes faqIn { from { opacity: 0; transform: translateY(-6px); } to { opacity: 1; transform: none; } }
+    .pill b { animation: ping 2s ease-out infinite; }
+    @keyframes ping { 0% { box-shadow: 0 0 0 0 rgba(34,197,94,.7); } 100% { box-shadow: 0 0 0 10px rgba(34,197,94,0); } }
+    .cta-art .phone { transition: transform .4s cubic-bezier(.2,.8,.2,1); }
+    .cta:hover .cta-art .phone { transform: rotate(0deg) translateY(-12px); }
+    .cta { background-size: 200% 200%; animation: ctaShift 12s ease-in-out infinite alternate; }
+    @keyframes ctaShift { from { background-position: 0% 50%; } to { background-position: 100% 50%; } }
+    .toast { position: fixed; left: 50%; bottom: 28px; z-index: 90; transform: translate(-50%, 30px); opacity: 0; padding: 10px 18px; border-radius: 999px; background: #fff; color: #09090b; font-weight: 700; font-size: .9rem; transition: opacity .3s, transform .3s; pointer-events: none; }
+    .toast.show { opacity: 1; transform: translate(-50%, 0); }
+
+    @media (prefers-reduced-motion: reduce) {
+      .chip, .cta, .pill b, .cursor-glow { animation: none !important; }
+      .chip { opacity: 1; }
+      .aurora i { translate: none; }
+    }
+    @media (hover: none) { .cursor-glow { display: none; } }
     @media (prefers-reduced-motion: reduce) {
       .aurora i, .track, .stage .phone { animation: none !important; }
       .rv { opacity: 1; transform: none; transition: none; }
@@ -219,6 +547,9 @@
   </style>
 </head>
 <body>
+  <div class="progress" aria-hidden="true"></div>
+  <div class="cursor-glow" aria-hidden="true"></div>
+  <div class="toast" role="status" aria-live="polite"></div>
   <nav class="nav" aria-label="Primary">
     <a class="brand" href="/" aria-label="in/out home"><img src="logo.svg" alt=""/>in/out</a>
     <div class="nav-links">
@@ -233,34 +564,97 @@
   <header class="hero">
     <div class="aurora" aria-hidden="true"><i></i><i></i><i></i></div>
     <span class="pill"><b></b>AI-powered · Now on Android</span>
-    <h1>Log food by <em>talking.</em></h1>
+    <h1>Your Daily <em>Calorie Companion</em></h1>
     <p class="hero-sub">Log meals with your voice, barcode scanner, or AI analysis. Track macros, build streaks, and hit your goals — free.</p>
     <div class="actions">
       <a class="btn btn-grad" href="https://play.google.com/store/apps/details?id=co.inoutapp.android">Download on Google Play</a>
       <a class="btn btn-ghost" href="#preview">See the app</a>
     </div>
     <div class="stage" aria-label="in/out app screenshots">
+      <span class="chip c1" aria-hidden="true">🎙️ “two eggs and toast” <b>+310 kcal</b></span>
+      <span class="chip c2" aria-hidden="true">🔥 <b>12-day</b> streak</span>
+      <span class="chip c3" aria-hidden="true">⚡ <b>+10 XP</b> logged</span>
       <div class="phone p-left"><img src="assets/app/log.webp" width="760" height="1465" alt="in/out Log screen with barcode, photo and describe-it options"/></div>
       <div class="phone p-mid"><img src="assets/app/home.webp" width="760" height="1465" alt="in/out home screen showing the calorie budget ring"/></div>
       <div class="phone p-right"><img src="assets/app/voice.webp" width="760" height="1465" alt="in/out voice logging sheet listening"/></div>
     </div>
   </header>
 
-  <div class="marquee" aria-hidden="true">
-    <div class="track">
-      <span>Voice logging</span><span>Photo to macros</span><span>Barcode scan</span><span>Health Connect</span><span>Streaks &amp; XP</span><span>Weekly trends</span><span>Leagues</span><span>GLP-1 mode</span><span>Dark mode</span><span>No account needed</span>
-      <span>Voice logging</span><span>Photo to macros</span><span>Barcode scan</span><span>Health Connect</span><span>Streaks &amp; XP</span><span>Weekly trends</span><span>Leagues</span><span>GLP-1 mode</span><span>Dark mode</span><span>No account needed</span>
+  <section class="ticker" aria-label="Feature highlights">
+    <div class="tk-row">
+      <button class="tk-btn" data-dir="-1" type="button" aria-label="Previous feature">&#8592;</button>
+      <div class="tk-viewport" tabindex="0" aria-label="Scrollable features. Drag, swipe or use the arrow keys.">
+        <div class="tk-track"></div>
+      </div>
+      <button class="tk-btn" data-dir="1" type="button" aria-label="Next feature">&#8594;</button>
     </div>
-  </div>
+    <div class="tk-detail" aria-live="polite">
+      <span class="tk-ic" aria-hidden="true"></span>
+      <div class="tk-txt"><b></b><p></p></div>
+      <a class="tk-go" href="#features">See it &#8594;</a>
+    </div>
+    <p class="tk-hint" aria-hidden="true">Drag, swipe or tap a feature</p>
+  </section>
 
   <main>
+    <section class="section shell" id="voice">
+      <div class="voice-grid">
+        <div class="voice-copy">
+          <p class="kicker rv">Signature feature</p>
+          <h2 class="vh rv">Log food by <em>talking.</em></h2>
+          <p class="lead rv">Tap the mic, say what you ate, and you're done. AI works out the foods, portions, calories and macros while you keep your hands free.</p>
+          <ul class="vpoints rv">
+            <li><b>One sentence.</b> “Two eggs, toast and a coffee.”</li>
+            <li><b>Instant macros.</b> Calories, protein, carbs and fat.</li>
+            <li><b>Fix in a tap.</b> Adjust any portion after logging.</li>
+          </ul>
+          <a class="btn btn-grad rv" href="https://play.google.com/store/apps/details?id=co.inoutapp.android">Try it free</a>
+        </div>
+        <div class="vdemo rv" aria-label="Animated demo of voice food logging">
+          <div class="vscreen">
+            <div class="vstat" aria-live="polite">Listening…</div>
+            <button class="mic" type="button" aria-label="Replay the voice demo"><span class="ring r1"></span><span class="ring r2"></span><span class="ring r3"></span>
+              <svg viewBox="0 0 24 24" width="34" height="34" fill="none" stroke="#1a0a05" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="3" width="6" height="12" rx="3"/><path d="M5 11a7 7 0 0 0 14 0M12 18v3"/></svg></button>
+            <div class="wave" aria-hidden="true"></div>
+            <p class="tx" aria-live="polite"></p>
+            <ul class="vlist"></ul>
+            <div class="vtotal"><span>Total</span><span><b>0</b> kcal</span></div>
+          </div>
+        </div>
+      </div>
+    </section>
+
     <section class="section shell" id="how">
       <p class="kicker rv">How it works</p>
       <h2 class="rv">Three steps to your goals.</h2>
       <div class="steps">
-        <div class="step rv"><div class="n">1</div><h3>Log in seconds</h3><p>Say what you ate, scan a barcode, or let AI analyze a description. No manual searching required.</p></div>
-        <div class="step rv"><div class="n">2</div><h3>Track everything</h3><p>Calories, macros, sleep, mood, steps, workouts — all in one dashboard that updates in real time.</p></div>
-        <div class="step rv"><div class="n">3</div><h3>Level up</h3><p>Earn XP for every log, complete daily missions, grow your streak, and unlock app features as you progress.</p></div>
+        <div class="step s1 rv">
+          <span class="ghost" aria-hidden="true">1</span>
+          <div class="viz">
+            <div class="bubble">“two eggs and toast”</div>
+            <div class="mini-wave" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i></div>
+          </div>
+          <span class="stepno">Step 01</span>
+          <h3>Log in seconds</h3><p>Say what you ate, scan a barcode, or let AI analyze a description. No manual searching required.</p>
+        </div>
+        <div class="step s2 rv">
+          <span class="ghost" aria-hidden="true">2</span>
+          <div class="viz">
+            <svg class="mini-ring" viewBox="0 0 80 80" aria-hidden="true"><circle cx="40" cy="40" r="32" class="trk"/><circle cx="40" cy="40" r="32" class="arc" pathLength="100"/><text x="40" y="45" text-anchor="middle">1,183</text></svg>
+            <div class="bars" aria-hidden="true"><span style="--w:78%"><em>P</em><u></u></span><span style="--w:52%"><em>C</em><u></u></span><span style="--w:34%"><em>F</em><u></u></span></div>
+          </div>
+          <span class="stepno">Step 02</span>
+          <h3>Track everything</h3><p>Calories, macros, sleep, mood, steps, workouts — all in one dashboard that updates in real time.</p>
+        </div>
+        <div class="step s3 rv">
+          <span class="ghost" aria-hidden="true">3</span>
+          <div class="viz">
+            <div class="lvl"><b>LVL 7</b><div class="xp"><u></u></div><b>8</b></div>
+            <span class="pop">+10 XP</span><span class="flame" aria-hidden="true">🔥</span>
+          </div>
+          <span class="stepno">Step 03</span>
+          <h3>Level up</h3><p>Earn XP for every log, complete daily missions, grow your streak, and unlock app features as you progress.</p>
+        </div>
       </div>
     </section>
 
@@ -284,26 +678,70 @@
       <p class="kicker rv">Features</p>
       <h2 class="rv" style="max-width:16ch">Everything you need to stay on track.</h2>
       <div class="features">
-        <div class="fcard rv"><h3>Voice &amp; AI Food Logging</h3><p>Say what you ate and AI instantly calculates calories, protein, carbs, and fat. No manual searching.</p><span class="tag">AI Powered</span></div>
-        <div class="fcard rv"><h3>Barcode Scanner</h3><p>Scan any packaged food barcode and get instant nutrition info from a 4M+ product database.</p><span class="tag">Instant</span></div>
-        <div class="fcard rv"><h3>Calorie &amp; Macro Tracking</h3><p>Track calories in vs out with a real-time budget ring. Set custom macro targets for protein, carbs, and fat.</p><span class="tag">Core Feature</span></div>
-        <div class="fcard rv"><h3>Daily Missions &amp; XP</h3><p>Complete daily missions to earn XP, level up from Rookie to Legend, and unlock features as you progress.</p><span class="tag">Gamified</span></div>
-        <div class="fcard rv"><h3>Sleep &amp; Mood Tracking</h3><p>Log nightly sleep and daily mood. See how rest connects to your nutrition and fitness goals.</p><span class="tag">Wellness</span></div>
-        <div class="fcard rv"><h3>Step Counter &amp; Workouts</h3><p>Track daily steps, log workouts from a full exercise database, and see calories burned in real time.</p><span class="tag">Fitness</span></div>
-        <div class="fcard rv"><h3>Trends &amp; Analytics</h3><p>Weekly and monthly charts for calories, macros, sleep, weight, and mood. Spot patterns instantly.</p><span class="tag">Insights</span></div>
-        <div class="fcard rv"><h3>Social Feed</h3><p>Share wins, post to the community forum, discover articles, and follow coaches — all inside the app.</p><span class="tag">Community</span></div>
-        <div class="fcard rv"><h3>Streak System</h3><p>Build daily logging streaks with freeze tokens to protect your progress. Stay consistent and earn rewards.</p><span class="tag">Habit Building</span></div>
-        <div class="fcard rv" style="grid-column: 1 / -1"><h3>Regional Leagues</h3><p>Compete in weekly pods, climb from Bronze to Diamond, and earn Sparks — a league-only currency you spend on frames, colors and worlds.</p><span class="tag">Competitive</span></div>
+        <div class="fcard f-voice rv" style="--c1:#fb923c;--c2:#f472b6">
+          <span class="ghost" aria-hidden="true">🎙️</span>
+          <div class="fviz"><div class="mini-wave" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i></div></div>
+          <span class="tag">AI Powered</span><h3>Voice &amp; AI Food Logging</h3><p>Say what you ate and AI instantly calculates calories, protein, carbs, and fat. No manual searching.</p>
+        </div>
+        <div class="fcard f-scan rv" style="--c1:#38bdf8;--c2:#22d3ee">
+          <span class="ghost" aria-hidden="true">📷</span>
+          <div class="fviz"><div class="bc" aria-hidden="true"><i style="--w:3px"></i><i style="--w:6px"></i><i style="--w:2px"></i><i style="--w:5px"></i><i style="--w:3px"></i><i style="--w:7px"></i><i style="--w:2px"></i><i style="--w:4px"></i><i style="--w:6px"></i><i style="--w:3px"></i><i style="--w:5px"></i><i style="--w:2px"></i><i style="--w:6px"></i><i style="--w:3px"></i><i style="--w:4px"></i><i style="--w:7px"></i><i style="--w:2px"></i><i style="--w:5px"></i><span class="scan"></span></div></div>
+          <span class="tag">Instant</span><h3>Barcode Scanner</h3><p>Scan any packaged food barcode and get instant nutrition info from a 4M+ product database.</p>
+        </div>
+        <div class="fcard f-macro rv" style="--c1:#22c55e;--c2:#a3e635">
+          <span class="ghost" aria-hidden="true">🎯</span>
+          <div class="fviz"><div class="bars wide" aria-hidden="true"><span style="--w:82%"><em>P</em><u></u></span><span style="--w:58%"><em>C</em><u></u></span><span style="--w:40%"><em>F</em><u></u></span></div></div>
+          <span class="tag">Core Feature</span><h3>Calorie &amp; Macro Tracking</h3><p>Track calories in vs out with a real-time budget ring. Set custom macro targets for protein, carbs, and fat.</p>
+        </div>
+        <div class="fcard f-xp rv" style="--c1:#a855f7;--c2:#f472b6">
+          <span class="ghost" aria-hidden="true">⚡</span>
+          <div class="fviz"><div class="lvl"><b>LVL 7</b><div class="xp"><u></u></div><b>8</b></div><span class="pop">+10 XP</span></div>
+          <span class="tag">Gamified</span><h3>Daily Missions &amp; XP</h3><p>Complete daily missions to earn XP, level up from Rookie to Legend, and unlock features as you progress.</p>
+        </div>
+        <div class="fcard f-sleep rv" style="--c1:#818cf8;--c2:#38bdf8">
+          <span class="ghost" aria-hidden="true">🌙</span>
+          <div class="fviz"><div class="moods" aria-hidden="true"><span>😴</span><span>🙂</span><span>😄</span><span>💪</span></div><span class="moon" aria-hidden="true">🌙</span></div>
+          <span class="tag">Wellness</span><h3>Sleep &amp; Mood Tracking</h3><p>Log nightly sleep and daily mood. See how rest connects to your nutrition and fitness goals.</p>
+        </div>
+        <div class="fcard f-steps rv" style="--c1:#fb923c;--c2:#facc15">
+          <span class="ghost" aria-hidden="true">👟</span>
+          <div class="fviz"><div class="stepcount" aria-hidden="true"><b data-count="8432">0</b><small>steps today</small></div></div>
+          <span class="tag">Fitness</span><h3>Step Counter &amp; Workouts</h3><p>Track daily steps, log workouts from a full exercise database, and see calories burned in real time.</p>
+        </div>
+        <div class="fcard f-trend rv" style="--c1:#14b8a6;--c2:#22c55e">
+          <span class="ghost" aria-hidden="true">📈</span>
+          <div class="fviz"><div class="chart" aria-hidden="true"><i style="--h:38%;--n:0"></i><i style="--h:55%;--n:1"></i><i style="--h:44%;--n:2"></i><i style="--h:70%;--n:3"></i><i style="--h:62%;--n:4"></i><i style="--h:88%;--n:5"></i><i style="--h:76%;--n:6"></i></div></div>
+          <span class="tag">Insights</span><h3>Trends &amp; Analytics</h3><p>Weekly and monthly charts for calories, macros, sleep, weight, and mood. Spot patterns instantly.</p>
+        </div>
+        <div class="fcard f-social rv" style="--c1:#f472b6;--c2:#fb7185">
+          <span class="ghost" aria-hidden="true">💬</span>
+          <div class="fviz"><div class="avs" aria-hidden="true"><span>🦊</span><span>🐙</span><span>🦄</span><span>🐢</span></div><span class="cb">Nice streak! 🔥</span></div>
+          <span class="tag">Community</span><h3>Social Feed</h3><p>Share wins, post to the community forum, discover articles, and follow coaches — all inside the app.</p>
+        </div>
+        <div class="fcard f-streak rv" style="--c1:#ef4444;--c2:#fb923c">
+          <span class="ghost" aria-hidden="true">🔥</span>
+          <div class="fviz"><div class="days" aria-hidden="true"><i style="--n:0"></i><i style="--n:1"></i><i style="--n:2"></i><i style="--n:3"></i><i style="--n:4"></i><i style="--n:5"></i><i style="--n:6"></i></div><span class="flame2" aria-hidden="true">🔥</span></div>
+          <span class="tag">Habit Building</span><h3>Streak System</h3><p>Build daily logging streaks with freeze tokens to protect your progress. Stay consistent and earn rewards.</p>
+        </div>
+        <div class="fcard f-league rv" style="--c1:#22d3ee;--c2:#a855f7;grid-column:1 / -1">
+          <span class="ghost" aria-hidden="true">🏆</span>
+          <div class="fviz"><div class="ranks" aria-hidden="true"><span style="--r:0">Bronze</span><span style="--r:1">Silver</span><span style="--r:2">Gold</span><span style="--r:3">Platinum</span><span style="--r:4">Diamond</span></div></div>
+          <span class="tag">Competitive</span><h3>Regional Leagues</h3><p>Compete in weekly pods, climb from Bronze to Diamond, and earn Sparks — a league-only currency you spend on frames, colors and worlds.</p>
+        </div>
       </div>
     </section>
 
-    <section class="theme">
+    <section class="theme" id="theme">
       <div class="shell">
         <p class="kicker rv">Day or night</p>
         <h2 class="rv">Looks right in both.</h2>
-        <div class="theme-pair rv">
-          <div class="phone"><img src="assets/app/home.webp" width="760" height="1465" loading="lazy" alt="in/out home in light mode"/></div>
-          <div class="phone"><img src="assets/app/home-dark.webp" width="760" height="1465" loading="lazy" alt="in/out home in dark mode"/></div>
+        <div class="compare rv" style="--x:50%">
+          <div class="cmp-phone phone">
+            <img src="assets/app/home.webp" width="760" height="1465" loading="lazy" alt="in/out home in light mode"/>
+            <img class="dark" src="assets/app/home-dark.webp" width="760" height="1465" loading="lazy" alt="in/out home in dark mode"/>
+            <span class="cmp-line" aria-hidden="true"><b>↔</b></span>
+          </div>
+          <label class="cmp-ctl"><span>☀️ Day</span><input type="range" min="0" max="100" value="50" aria-label="Slide between light and dark mode"/><span>Night 🌙</span></label>
         </div>
       </div>
     </section>
@@ -313,22 +751,25 @@
       <h2 class="rv">Simple, honest pricing.</h2>
       <p class="lead rv">Start free. Upgrade only if you want more.</p>
       <div class="pricing" style="text-align:left">
-        <div class="plan rv">
+        <div class="plan p-free rv">
+          <div class="pviz"><div class="dots" aria-hidden="true"><i style="--n:0"></i><i style="--n:1"></i><i style="--n:2"></i><i style="--n:3"></i><i style="--n:4"></i></div><small>AI logs / day</small></div>
           <div class="name">Free</div><div class="price">$0</div><div class="note">No credit card · forever free</div>
           <ul>
             <li>Full calorie &amp; macro tracking</li><li>4M+ barcode database</li><li>5 AI food logs per day</li><li>Daily missions &amp; XP</li><li>Streak tracking</li><li>Social community</li><li>Sleep &amp; mood logging</li>
           </ul>
           <a class="btn btn-ghost" href="https://play.google.com/store/apps/details?id=co.inoutapp.android">Download Free</a>
         </div>
-        <div class="plan hot rv">
+        <div class="plan p-pro hot rv">
           <span class="badge">Most Popular</span>
+          <div class="pviz"><span class="inf" aria-hidden="true">∞</span><small>yours forever</small></div>
           <div class="name">Pro</div><div class="price">$2</div><div class="note">One-time · own forever</div>
           <ul>
             <li>Everything in Free</li><li>Calorie cycling (workout vs rest days)</li><li>Custom widget layout</li><li>Data export (CSV)</li><li>Meal templates</li><li>Advanced trends &amp; analytics</li><li>Custom macro targets</li><li>Unlimited saved meals</li>
           </ul>
           <a class="btn btn-grad" href="https://play.google.com/store/apps/details?id=co.inoutapp.android">Get Pro — $2</a>
         </div>
-        <div class="plan rv">
+        <div class="plan p-ai rv">
+          <div class="pviz"><div class="mini-wave" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i></div><small>unlimited voice</small></div>
           <div class="name">AI Add-on</div><div class="price">$4<small>/mo</small></div><div class="note">7-day free trial · cancel anytime</div>
           <ul>
             <li>Unlimited AI food analysis</li><li>Unlimited voice logging</li><li>Barcode scanner</li><li>AI nutrition insights</li><li>Restaurant menu analysis</li>
@@ -398,15 +839,231 @@
         }, { threshold: 0.12, rootMargin: '0px 0px -6% 0px' });
         els.forEach(function (e) { io.observe(e); });
       }
-      var img = document.getElementById('viewerImg'), viewer = document.querySelector('.viewer');
-      var tabs = document.querySelectorAll('.tab');
-      tabs.forEach(function (t) {
-        t.addEventListener('click', function () {
-          tabs.forEach(function (x) { x.setAttribute('aria-selected', x === t ? 'true' : 'false'); });
-          viewer.style.setProperty('--glow', t.dataset.glow);
-          img.classList.add('swap');
-          setTimeout(function () { img.src = 'assets/app/' + t.dataset.img + '.webp'; img.alt = t.dataset.alt; img.classList.remove('swap'); }, 180);
+      var reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+      var fine = window.matchMedia('(hover: hover) and (pointer: fine)').matches;
+      var $ = function (s, c) { return (c || document).querySelector(s); };
+      var $$ = function (s, c) { return Array.prototype.slice.call((c || document).querySelectorAll(s)); };
+      var clamp = function (v, a, b) { return Math.max(a, Math.min(b, v)); };
+
+      /* ---- app preview tabs: click + auto-cycle + swipe-ish swap ---- */
+      var img = document.getElementById('viewerImg'), viewer = $('.viewer');
+      var tabs = $$('.tab'), cur = 0, timer = null, userTook = false, inView = false, AUTO = 5000;
+      ['home','voice','log','progress','compete','discover'].forEach(function (n) { var i = new Image(); i.src = 'assets/app/' + n + '.webp'; });
+      function select(i, auto) {
+        var t = tabs[i]; if (!t) return; cur = i;
+        tabs.forEach(function (x) { x.setAttribute('aria-selected', x === t ? 'true' : 'false'); x.classList.remove('auto'); });
+        viewer.style.setProperty('--glow', t.dataset.glow);
+        img.classList.add('swap');
+        setTimeout(function () { img.src = 'assets/app/' + t.dataset.img + '.webp'; img.alt = t.dataset.alt; img.classList.remove('swap'); }, 180);
+        if (auto) { void t.offsetWidth; t.style.setProperty('--dur', AUTO + 'ms'); t.classList.add('auto'); }
+      }
+      function schedule() {
+        clearTimeout(timer);
+        if (reduce || userTook || !inView) return;
+        tabs[cur].classList.remove('auto'); void tabs[cur].offsetWidth; tabs[cur].style.setProperty('--dur', AUTO + 'ms'); tabs[cur].classList.add('auto');
+        timer = setTimeout(function () { select((cur + 1) % tabs.length, true); schedule(); }, AUTO);
+      }
+      tabs.forEach(function (t, i) {
+        t.addEventListener('click', function () { userTook = true; clearTimeout(timer); select(i, false); });
+      });
+      if ('IntersectionObserver' in window) {
+        new IntersectionObserver(function (e) { inView = e[0].isIntersecting; if (inView) schedule(); else clearTimeout(timer); }, { threshold: 0.35 }).observe($('.preview'));
+      }
+
+      /* ---- rotating hero word ---- */
+      /* ---- voice demo: mic -> transcript types -> foods pop in -> total counts ---- */
+      var demo = $('.vdemo'), mic = $('.mic', demo), tx = $('.tx', demo), list = $('.vlist', demo), totalEl = $('.vtotal b', demo), wave = $('.wave', demo), vstat = $('.vstat', demo);
+      var SETS = [
+        { say: 'two eggs and toast with butter', items: [['🥚', '2 large eggs', 140], ['🍞', 'Toast, 1 slice', 80], ['🧈', 'Butter, 1 tbsp', 100]] },
+        { say: 'a bowl of oatmeal with a banana', items: [['🥣', 'Oatmeal, 1 cup', 160], ['🍌', 'Banana, medium', 105]] },
+        { say: 'chicken burrito bowl and a coke', items: [['🍗', 'Chicken burrito bowl', 620], ['🥤', 'Coke, 12 oz', 140]] }
+      ], si = 0, run = 0;
+      for (var b = 0; b < 28; b++) { var s = document.createElement('i'); s.style.setProperty('--i', b); s.style.setProperty('--h', (0.3 + Math.abs(Math.sin(b * 1.7)) * 0.7).toFixed(2)); wave.appendChild(s); }
+      function sleep(ms) { return new Promise(function (r) { setTimeout(r, ms); }); }
+      function countTo(el, from, to, ms, id) { var t0 = performance.now(); (function f(t) { if (id !== run) return; var k = clamp((t - t0) / ms, 0, 1); el.textContent = Math.round(from + (to - from) * (1 - Math.pow(1 - k, 3))); if (k < 1) requestAnimationFrame(f); })(t0); }
+      async function play() {
+        var id = ++run, set = SETS[si % SETS.length]; si++;
+        tx.textContent = ''; list.innerHTML = ''; totalEl.textContent = '0'; demo.classList.remove('done'); demo.classList.add('listening'); vstat.textContent = 'Listening…';
+        await sleep(600); if (id !== run) return;
+        for (var i = 1; i <= set.say.length; i++) { tx.textContent = '“' + set.say.slice(0, i) + (i === set.say.length ? '”' : ''); await sleep(reduce ? 0 : 45); if (id !== run) return; }
+        demo.classList.remove('listening'); vstat.textContent = 'Analyzing…'; await sleep(700); if (id !== run) return;
+        var sum = 0;
+        for (var j = 0; j < set.items.length; j++) {
+          var it = set.items[j], li = document.createElement('li');
+          li.innerHTML = '<span class="e">' + it[0] + '</span><span class="n">' + it[1] + '</span><span class="k"><b>' + it[2] + '</b> kcal</span>';
+          list.appendChild(li); void li.offsetWidth; li.classList.add('in');
+          countTo(totalEl, sum, sum + it[2], 600, id); sum += it[2]; await sleep(550); if (id !== run) return;
+        }
+        demo.classList.add('done'); vstat.textContent = 'Logged ✓  +10 XP';
+        if (!reduce) { await sleep(3800); if (id !== run) return; if (inDemo) play(); }
+      }
+      var inDemo = false;
+      if ('IntersectionObserver' in window) new IntersectionObserver(function (e) { var was = inDemo; inDemo = e[0].isIntersecting; if (inDemo && !was) play(); if (!inDemo) run++; }, { threshold: 0.4 }).observe(demo);
+      else play();
+      mic.addEventListener('click', play);
+
+      /* ---- scroll: progress bar, nav state, active link, theme phones, aurora ---- */
+      var bar = $('.progress'), nav = $('.nav'), theme = $('.theme'), themePair = $('.theme-pair') || document.createElement('div');
+      var links = $$('.nav-links a'), secs = links.map(function (a) { return $(a.getAttribute('href')); });
+      var aur = $$('.aurora i'), ticking = false;
+      function onScroll() {
+        var y = window.scrollY, h = document.documentElement.scrollHeight - window.innerHeight;
+        bar.style.setProperty('--p', h > 0 ? clamp(y / h, 0, 1).toFixed(4) : 0);
+        nav.classList.toggle('scrolled', y > 24);
+        var mid = window.innerHeight * 0.4, act = -1;
+        secs.forEach(function (s, i) { if (s) { var r = s.getBoundingClientRect(); if (r.top < mid && r.bottom > mid) act = i; } });
+        links.forEach(function (a, i) { a.classList.toggle('active', i === act); });
+        var r = theme.getBoundingClientRect(), p = (window.innerHeight * 0.5 - (r.top + r.height / 2)) / window.innerHeight;
+        themePair.style.setProperty('--t', clamp(Math.abs(p) * 1.6, 0, 1).toFixed(3));
+        ticking = false;
+      }
+      window.addEventListener('scroll', function () { if (!ticking) { ticking = true; requestAnimationFrame(onScroll); } }, { passive: true });
+      window.addEventListener('resize', onScroll); onScroll();
+
+      /* ---- pointer effects (desktop only) ---- */
+      if (fine && !reduce) {
+        var glow = $('.cursor-glow'), stage = $('.stage'), hero = $('.hero');
+        window.addEventListener('mousemove', function (e) {
+          glow.classList.add('on'); glow.style.transform = 'translate(' + e.clientX + 'px,' + e.clientY + 'px)';
+        }, { passive: true });
+        document.addEventListener('mouseleave', function () { glow.classList.remove('on'); });
+
+        /* spotlight on cards */
+        $$('.step, .fcard, .plan').forEach(function (c) {
+          c.addEventListener('mousemove', function (e) { var r = c.getBoundingClientRect(); c.style.setProperty('--sx', (e.clientX - r.left) + 'px'); c.style.setProperty('--sy', (e.clientY - r.top) + 'px'); });
         });
+        /* 3D tilt on the app viewer phone */
+        var vp = $('.viewer .phone');
+        viewer.addEventListener('mousemove', function (e) {
+          var r = viewer.getBoundingClientRect(), x = (e.clientX - r.left) / r.width - 0.5, y = (e.clientY - r.top) / r.height - 0.5;
+          vp.style.transform = 'perspective(900px) rotateY(' + (x * 16).toFixed(2) + 'deg) rotateX(' + (-y * 12).toFixed(2) + 'deg)';
+        });
+        viewer.addEventListener('mouseleave', function () { vp.style.transform = ''; });
+      }
+
+
+      /* ---- compare slider (day/night) ---- */
+      var cmp = $('.compare'), cin = $('input', cmp), cph = $('.cmp-phone', cmp);
+      function setX(v) { cmp.style.setProperty('--x', v + '%'); cin.value = v; }
+      cin.addEventListener('input', function () { setX(cin.value); });
+      function dragX(e) { var r = cph.getBoundingClientRect(); setX(clamp(((e.clientX - r.left) / r.width) * 100, 0, 100).toFixed(1)); }
+      cph.addEventListener('pointerdown', function (e) { cph.setPointerCapture(e.pointerId); dragX(e); cph.onpointermove = dragX; });
+      cph.addEventListener('pointerup', function () { cph.onpointermove = null; });
+      if (fine) cph.addEventListener('mousemove', function (e) { if (!cph.onpointermove) dragX(e); });
+      if ('IntersectionObserver' in window && !reduce) {
+        var swept = false;
+        new IntersectionObserver(function (e, ob) {
+          if (!e[0].isIntersecting || swept) return; swept = true; ob.disconnect();
+          var t0 = performance.now(); setX(0);
+          (function f(t) { var k = clamp((t - t0) / 1600, 0, 1); setX((50 * (1 - Math.cos(k * Math.PI))).toFixed(1)); if (k < 1) requestAnimationFrame(f); })(t0);
+        }, { threshold: 0.5 }).observe(cph);
+      }
+
+      /* ---- step counter count-up ---- */
+      $$('[data-count]').forEach(function (el) {
+        var target = +el.dataset.count, done = false;
+        if (reduce) { el.textContent = target.toLocaleString(); return; }
+        new IntersectionObserver(function (e, ob) {
+          if (!e[0].isIntersecting || done) return; done = true; ob.disconnect();
+          var t0 = performance.now();
+          (function f(t) { var k = clamp((t - t0) / 1400, 0, 1); el.textContent = Math.round(target * (1 - Math.pow(1 - k, 3))).toLocaleString(); if (k < 1) requestAnimationFrame(f); })(t0);
+        }, { threshold: 0.6 }).observe(el);
+      });
+
+      /* ---- feature ticker: drag / swipe / arrows / inertia / loop / detail ---- */
+      (function () {
+        var DATA = [
+          ['🎙️', 'Voice logging', '#fb923c', 'Say what you ate and it\u2019s logged. One tap, one sentence.', '#voice'],
+          ['📸', 'Photo to macros', '#f472b6', 'Snap your plate and get calories and macros back.', '#features'],
+          ['📷', 'Barcode scan', '#38bdf8', 'Scan packaged food and pull nutrition from a 4M+ product database.', '#features'],
+          ['❤️', 'Health Connect', '#ef4444', 'Read steps, heart rate, weight and active calories from your watch or tracker.', '#faq'],
+          ['🔥', 'Streaks & XP', '#fb923c', 'Log daily, build a streak, earn XP and level up from Rookie to Legend.', '#features'],
+          ['📈', 'Weekly trends', '#14b8a6', 'Charts for calories, macros, sleep, weight and mood.', '#features'],
+          ['🏆', 'Leagues', '#a855f7', 'Compete in weekly pods and climb from Bronze to Diamond.', '#features'],
+          ['💊', 'GLP-1 mode', '#22c55e', 'A mode made for people on GLP-1 medication.', '#features'],
+          ['🌙', 'Dark mode', '#818cf8', 'Looks right in both. Slide between day and night.', '#theme'],
+          ['🔓', 'No account needed', '#22d3ee', 'Look around and start logging before you sign up.', '#pricing']
+        ];
+        var vp = $('.tk-viewport'), track = $('.tk-track'), det = $('.tk-detail'), txt = $('.tk-txt', det);
+        if (!vp) return;
+        var pills = [];
+        [0, 1].forEach(function (copy) {
+          DATA.forEach(function (d, i) {
+            var b = document.createElement('button');
+            b.type = 'button'; b.className = 'tk-pill'; b.style.setProperty('--c', d[2]); b.dataset.i = i;
+            b.innerHTML = '<span class="ic" aria-hidden="true">' + d[0] + '</span>' + d[1].replace(/&/g, '&amp;');
+            if (copy) { b.tabIndex = -1; b.setAttribute('aria-hidden', 'true'); }
+            track.appendChild(b); pills.push(b);
+          });
+        });
+        var x = 0, v = 0, anim = null, half = 1, dragging = false, moved = 0, lastX = 0, lastT = 0, hover = false, sel = 0;
+        function measure() { half = track.scrollWidth / 2; }
+        function mod(n, m) { return ((n % m) + m) % m; }
+        function show(i) {
+          sel = mod(i, DATA.length); var d = DATA[sel];
+          pills.forEach(function (p) { p.classList.toggle('on', +p.dataset.i === sel); });
+          txt.classList.add('swap');
+          setTimeout(function () {
+            $('b', txt).textContent = d[1]; $('p', txt).textContent = d[3]; $('.tk-ic', det).textContent = d[0];
+            $('.tk-go', det).setAttribute('href', d[4]); txt.classList.remove('swap');
+          }, 160);
+          det.style.setProperty('--c', d[2]);
+        }
+        function centerOn(i) {
+          var p = pills[i], target = p.offsetLeft + p.offsetWidth / 2 - vp.clientWidth / 2;
+          var diff = mod(target - x + half / 2, half) - half / 2;
+          anim = x + diff; v = 0;
+        }
+        function go(i) { show(i); centerOn(mod(i, DATA.length)); }
+        function frame() {
+          if (!dragging) {
+            if (anim !== null) { x += (anim - x) * 0.14; if (Math.abs(anim - x) < 0.5) { x = anim; anim = null; } }
+            else if (Math.abs(v) > 0.15) { x += v; v *= 0.95; }
+            else if (!hover && !reduce && document.visibilityState === 'visible') x += 0.45;
+          }
+          var w = Math.floor(x / half) * half; if (w) { x -= w; if (anim !== null) anim -= w; }
+          track.style.transform = 'translate3d(' + (-x).toFixed(2) + 'px,0,0)';
+          requestAnimationFrame(frame);
+        }
+        vp.addEventListener('pointerdown', function (e) {
+          dragging = true; moved = 0; anim = null; v = 0; lastX = e.clientX; lastT = performance.now(); vp.classList.add('drag');
+        });
+        window.addEventListener('pointermove', function (e) {
+          if (!dragging) return;
+          var dx = e.clientX - lastX, now = performance.now(), dt = Math.max(1, now - lastT);
+          moved += Math.abs(dx); x -= dx; v = clamp(-dx / dt * 16, -40, 40); lastX = e.clientX; lastT = now;
+        });
+        window.addEventListener('pointerup', function () { if (!dragging) return; dragging = false; vp.classList.remove('drag'); });
+        track.addEventListener('click', function (e) {
+          var b = e.target.closest('.tk-pill'); if (!b || moved > 6) { e.preventDefault(); return; }
+          go(+b.dataset.i);
+        }, true);
+        $$('.tk-btn').forEach(function (b) { b.addEventListener('click', function () { go(sel + (+b.dataset.dir)); }); });
+        vp.addEventListener('keydown', function (e) { if (e.key === 'ArrowRight') { e.preventDefault(); go(sel + 1); } if (e.key === 'ArrowLeft') { e.preventDefault(); go(sel - 1); } });
+        vp.addEventListener('wheel', function (e) { if (Math.abs(e.deltaX) > Math.abs(e.deltaY)) { e.preventDefault(); anim = null; x += e.deltaX; } }, { passive: false });
+        $('.ticker').addEventListener('mouseenter', function () { hover = true; });
+        $('.ticker').addEventListener('mouseleave', function () { hover = false; });
+        window.addEventListener('resize', measure);
+        measure(); show(0); requestAnimationFrame(frame);
+        if (document.fonts && document.fonts.ready) document.fonts.ready.then(measure);
+      })();
+      /* ---- price count-up when plans reveal ---- */
+      $$('.plan .price').forEach(function (p) {
+        var m = p.firstChild.nodeValue.match(/\$(\d+)/); if (!m || reduce) return;
+        var target = +m[1], node = p.firstChild, done = false;
+        if (!target) return;
+        node.nodeValue = '$0';
+        new IntersectionObserver(function (en, ob) {
+          if (!en[0].isIntersecting || done) return; done = true; ob.disconnect();
+          var t0 = performance.now();
+          (function tick(t) { var k = clamp((t - t0) / 900, 0, 1); node.nodeValue = '$' + Math.round(target * (1 - Math.pow(1 - k, 3))); if (k < 1) requestAnimationFrame(tick); })(t0);
+        }, { threshold: 0.6 }).observe(p);
+      });
+
+      /* ---- smooth in-page nav toast on Play links ---- */
+      var toast = $('.toast'), tt;
+      $$('a[href*="play.google.com"]').forEach(function (a) {
+        a.addEventListener('click', function () { toast.textContent = 'Opening Google Play…'; toast.classList.add('show'); clearTimeout(tt); tt = setTimeout(function () { toast.classList.remove('show'); }, 1800); });
       });
     })();
   </script>
