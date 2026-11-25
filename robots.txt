@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+Disallow: /social-approved
+Sitemap: https://inoutcc.app/sitemap.xml
