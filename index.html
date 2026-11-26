@@ -774,9 +774,9 @@
         </div>
         <div class="plan p-ai rv">
           <div class="pviz"><div class="mini-wave" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i></div><small>unlimited voice</small></div>
-          <div class="name">AI Add-on</div><div class="price">$4<small>/mo</small></div><div class="note">7-day free trial · cancel anytime</div>
+          <div class="name">AI Add-on</div><div class="price">$4<small>/mo</small></div><div class="note">or $40/yr · 7-day free trial · cancel anytime</div>
           <ul>
-            <li>Unlimited AI food analysis</li><li>Unlimited voice logging</li><li>Barcode scanner</li><li>AI nutrition insights</li><li>Restaurant menu analysis</li>
+            <li>Unlimited AI food analysis</li><li>Unlimited voice logging</li><li>Photo logging</li><li>AI nutrition insights</li><li>Restaurant menu analysis</li>
           </ul>
           <a class="btn btn-primary" href="https://play.google.com/store/apps/details?id=co.inoutapp.android">Start Free Trial</a>
         </div>
@@ -787,7 +787,7 @@
       <p class="kicker rv">FAQ</p>
       <h2 class="rv">Common questions.</h2>
       <div class="faq rv" style="text-align:left">
-        <details><summary>Is in/out really free?</summary><p>Yes — core calorie and macro tracking is completely free with no time limit. You get 5 AI food logs per day on the free plan. Pro ($2 one-time) and AI subscription ($4/mo) are optional upgrades.</p></details>
+        <details><summary>Is in/out really free?</summary><p>Yes — core calorie and macro tracking is completely free with no time limit. You get 5 AI food logs per day on the free plan. Pro ($2 one-time) and the AI subscription ($4/mo or $40/yr) are optional upgrades.</p></details>
         <details><summary>How accurate is the AI food logging?</summary><p>Very accurate for common foods and meals. The AI uses contextual understanding — "large bowl of pasta bolognese" gives you a reasonable estimate based on standard serving sizes. For precise tracking, you can adjust portions after logging.</p></details>
         <details><summary>Does it work with my smartwatch or fitness tracker?</summary><p>Yes — in/out integrates with Android Health Connect, which can read supported data from apps like Fitbit, Samsung Health, Garmin Connect, Polar Flow, Oura, Whoop, and more. in/out currently requests read-only access for steps, heart rate, weight, and active calories burned.</p></details>
         <details><summary>Can I cancel the AI subscription anytime?</summary><p>Absolutely. Cancel any time before the 7-day trial ends and you won't be charged. Manage your subscription directly through Google Play.</p></details>
@@ -799,13 +799,12 @@
 
   <section class="cta rv">
     <div class="cta-copy">
-      <h2>Help shape the first public build.</h2>
-      <p>Join the Android test track, use in/out for a few real days, and tell us what feels fast, confusing, broken, or worth keeping.</p>
+      <h2>Tell us what you think.</h2>
+      <p>Use in/out for a few real days, then tell us what feels fast, confusing, broken, or worth keeping.</p>
       <div class="actions" style="justify-content:flex-start">
         <a class="btn btn-primary" href="https://play.google.com/store/apps/details?id=co.inoutapp.android">Open Google Play</a>
-        <a class="btn" style="background:rgba(0,0,0,0.25);color:#fff;border-color:rgba(255,255,255,0.25)" href="mailto:inoutsupport@proton.me?subject=in/out%20open%20testing%20feedback">Send Feedback</a>
+        <a class="btn" style="background:rgba(0,0,0,0.25);color:#fff;border-color:rgba(255,255,255,0.25)" href="mailto:inoutsupport@proton.me?subject=in/out%20feedback">Send Feedback</a>
       </div>
-      <p class="focus">Testing focus: food logging · Health Connect · charts · upgrades · feedback</p>
     </div>
     <div class="cta-art" aria-hidden="true">
       <div class="phone"><img src="assets/app/welcome.webp" width="760" height="1646" loading="lazy" alt=""/></div>
@@ -1051,19 +1050,6 @@
         measure(); show(0); requestAnimationFrame(frame);
         if (document.fonts && document.fonts.ready) document.fonts.ready.then(measure);
       })();
-      /* ---- price count-up when plans reveal ---- */
-      $$('.plan .price').forEach(function (p) {
-        var m = p.firstChild.nodeValue.match(/\$(\d+)/); if (!m || reduce) return;
-        var target = +m[1], node = p.firstChild, done = false;
-        if (!target) return;
-        node.nodeValue = '$0';
-        new IntersectionObserver(function (en, ob) {
-          if (!en[0].isIntersecting || done) return; done = true; ob.disconnect();
-          var t0 = performance.now();
-          (function tick(t) { var k = clamp((t - t0) / 900, 0, 1); node.nodeValue = '$' + Math.round(target * (1 - Math.pow(1 - k, 3))); if (k < 1) requestAnimationFrame(tick); })(t0);
-        }, { threshold: 0.6 }).observe(p);
-      });
-
       /* ---- smooth in-page nav toast on Play links ---- */
       var toast = $('.toast'), tt;
       $$('a[href*="play.google.com"]').forEach(function (a) {
